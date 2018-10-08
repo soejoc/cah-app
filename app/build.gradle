@@ -28,7 +28,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/io.netty/netty-all
     implementation group: 'io.netty', name: 'netty-all', version: '4.1.15.Final'
-    implementation files('../cah-framework/build/cah-framework-1.0-SNAPSHOT.jar')
+    implementation files('../../cah-framework/build/cah-framework-1.0-SNAPSHOT.jar')
 
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
