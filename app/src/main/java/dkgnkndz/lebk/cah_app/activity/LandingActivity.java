@@ -21,21 +21,21 @@ public class LandingActivity extends ActivityBase {
     Thread networkingThread;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
         ButterKnife.bind(this);
     }
 
-    public void play(View view) {
+    public void play(final View view) {
         if(networkingThread == null) {
             final String nickName = this.nickname.getText().toString();
 
-            StartGameRequest startGameRequest = new StartGameRequest();
+            final StartGameRequest startGameRequest = new StartGameRequest();
             startGameRequest.nickName = nickName;
 
-            NetworkWorker networkWorker = new NetworkWorker(host, port, startGameRequest);
+            final NetworkWorker networkWorker = new NetworkWorker(host, port, startGameRequest);
             networkingThread = new Thread(networkWorker);
             networkingThread.start();
         }

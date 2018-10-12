@@ -26,17 +26,17 @@ public class NetworkWorker implements Runnable {
 
     @Override
     public void run() {
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         try {
-            Bootstrap b = new Bootstrap();
+            final Bootstrap b = new Bootstrap();
             b.group(workerGroup);
             b.channel(NioSocketChannel.class);
             b.option(ChannelOption.SO_KEEPALIVE, true);
             b.handler(new ChannelInitializer<SocketChannel>() {
 
                 @Override
-                public void initChannel(SocketChannel ch)
+                public void initChannel(final SocketChannel ch)
                         throws Exception {
                     ch.pipeline().addLast(
                             new MetaDecoder(),
@@ -46,10 +46,10 @@ public class NetworkWorker implements Runnable {
                 }
             });
 
-            ChannelFuture f = b.connect(host, port).sync();
+            final ChannelFuture f = b.connect(host, port).sync();
 
             f.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             MessageHandler.setServerSession(null);
         }
         finally {
