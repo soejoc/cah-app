@@ -12,8 +12,8 @@ import protocol.object.request.StartGameRequest;
 
 public class LandingActivity extends ActivityBase {
 
-    private static final String host = "127.0.0.1";
-    private static final int port = 8346;
+    private static final String host = "10.0.2.2";
+    private static final int port = 8345;
     
     @BindView(R.id.nickname)
     EditText nickname;
@@ -29,11 +29,15 @@ public class LandingActivity extends ActivityBase {
     }
 
     public void play(View view) {
-        final String nickname = this.nickname.getText().toString();
+        if(networkingThread == null) {
+            final String nickName = this.nickname.getText().toString();
 
-        //ToDo: Check if a networking thread already exists
-        NetworkWorker networkWorker = new NetworkWorker(host, port, nickname);
-        networkingThread = new Thread(networkWorker);
-        networkingThread.start();
+            StartGameRequest startGameRequest = new StartGameRequest();
+            startGameRequest.nickName = nickName;
+
+            NetworkWorker networkWorker = new NetworkWorker(host, port, startGameRequest);
+            networkingThread = new Thread(networkWorker);
+            networkingThread.start();
+        }
     }
 }

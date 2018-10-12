@@ -3,7 +3,6 @@ package dkgnkndz.lebk.cah_app.network.thread;
 import codec.decoder.meta.MetaDecoder;
 import codec.encoder.meta.MetaEncoder;
 import dkgnkndz.lebk.cah_app.network.handler.MessageHandler;
-import dkgnkndz.lebk.cah_app.network.handler.ProcessingHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -12,16 +11,17 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import protocol.object.ProtocolObject;
 
 public class NetworkWorker implements Runnable {
     private final String host;
     private final int port;
-    private final String nickname;
+    private final ProtocolObject initialRequest;
 
-    public NetworkWorker(final String host, final int port, final String nickname) {
+    public NetworkWorker(final String host, final int port, final ProtocolObject initialRequest) {
         this.host = host;
         this.port = port;
-        this.nickname = nickname;
+        this.initialRequest = initialRequest;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class NetworkWorker implements Runnable {
                     ch.pipeline().addLast(
                             new MetaDecoder(),
                             new MetaEncoder(),
-                            new MessageHandler(nickname)
+                            new MessageHandler(initialRequest)
                     );
                 }
             });
@@ -50,7 +50,7 @@ public class NetworkWorker implements Runnable {
 
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
-            ProcessingHandler.setServerSession(null);
+            MessageHandler.setServerSession(null);
         }
         finally {
             workerGroup.shutdownGracefully();
