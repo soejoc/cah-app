@@ -3,6 +3,7 @@ package dkgnkndz.lebk.cah_app.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,6 +18,9 @@ public class LandingActivity extends ActivityBase {
     @BindView(R.id.nickname)
     EditText nickname;
 
+    @BindView(R.id.waitForGameProgressBar)
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,17 +32,22 @@ public class LandingActivity extends ActivityBase {
     public void play(final View view) {
         MyApp myApp = (MyApp)getApplication();
 
+        final String nickName = this.nickname.getText().toString();
+        final StartGameRequest startGameRequest = new StartGameRequest();
+        startGameRequest.nickName = nickName;
+
         if(myApp.getNetworkingThread() == null) {
-            final String nickName = this.nickname.getText().toString();
-
-            final StartGameRequest startGameRequest = new StartGameRequest();
-            startGameRequest.nickName = nickName;
-
             myApp.createConnection(startGameRequest);
+        } else {
+            request(startGameRequest);
         }
     }
 
     public void onStartGame(final StartGameResponse startGameResponse) {
 
+    }
+
+    public void onWaitForGame() {
+        progressBar.setVisibility(View.VISIBLE);
     }
 }

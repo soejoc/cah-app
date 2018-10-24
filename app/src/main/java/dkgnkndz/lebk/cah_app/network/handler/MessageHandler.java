@@ -55,6 +55,7 @@ public class MessageHandler extends ProcessingHandler {
                 protocolObject = new StartGameResponse();
                 break;
             }
+
             default: {
                 break;
             }
@@ -62,9 +63,10 @@ public class MessageHandler extends ProcessingHandler {
 
         if(protocolObject != null) {
             protocolObject.fromStream(rawMessage);
-            Message message = messageTransitionHandler.obtainMessage(protocolObject.getMessageId(), protocolObject);
-            message.sendToTarget();
         }
+
+        final Message message = messageTransitionHandler.obtainMessage(messageId, protocolObject);
+        message.sendToTarget();
     }
 
     @Override

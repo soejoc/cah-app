@@ -31,6 +31,16 @@ public class MessageTransitionHandler extends Handler {
             case MessageCode.START_GAME_RS: {
                 final StartGameResponse startGameResponse = (StartGameResponse)protocolObject;
                 ((LandingActivity)activityBase).onStartGame(startGameResponse);
+                break;
+            }
+
+            case MessageCode.WAIT_FOR_GAME_RS: {
+                ((LandingActivity)activityBase).onWaitForGame();
+                break;
+            }
+
+            default: {
+                break;
             }
         }
     }
