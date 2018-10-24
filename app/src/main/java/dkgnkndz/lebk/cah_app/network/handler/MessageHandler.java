@@ -3,7 +3,9 @@ package dkgnkndz.lebk.cah_app.network.handler;
 import channel_handler.ProcessingHandler;
 import dkgnkndz.lebk.cah_app.network.session.ServerSession;
 import io.netty.channel.ChannelHandlerContext;
+import protocol.error.ErrorCode;
 import protocol.object.ProtocolObject;
+import protocol.object.error.ErrorObject;
 import session.Session;
 import throwable.exception.InvalidInputStreamException;
 import util.ProtocolInputStream;
@@ -36,12 +38,17 @@ public class MessageHandler extends ProcessingHandler {
     }
 
     @Override
-    protected Session getOrCreateSession(final ChannelHandlerContext ctx) {
+    protected Session getSession(final ChannelHandlerContext ctx) {
         return serverSession;
     }
 
     @Override
-    protected void handleMessage(final int messageId, final ProtocolInputStream rawMessage, final Session session) throws InvalidInputStreamException {
+    protected void handleMessage(final int messageId, final ProtocolInputStream rawMessage, final Session session) {
+
+    }
+
+    @Override
+    protected void onErrorReceived(final ErrorObject errorObject, final Session session) {
 
     }
 }
