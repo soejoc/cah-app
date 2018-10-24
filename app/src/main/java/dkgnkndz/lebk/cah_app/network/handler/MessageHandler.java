@@ -1,17 +1,21 @@
 package dkgnkndz.lebk.cah_app.network.handler;
 
+import android.os.Message;
+
 import channel_handler.ProcessingHandler;
 import dkgnkndz.lebk.cah_app.network.session.ServerSession;
 import io.netty.channel.ChannelHandlerContext;
-import protocol.error.ErrorCode;
+import protocol.MessageCode;
 import protocol.object.ProtocolObject;
 import protocol.object.error.ErrorObject;
+import protocol.object.response.StartGameResponse;
 import session.Session;
-import throwable.exception.InvalidInputStreamException;
 import util.ProtocolInputStream;
 
 public class MessageHandler extends ProcessingHandler {
     private static ServerSession serverSession;
+
+    private MessageTransitionHandler messageTransitionHandler = new MessageTransitionHandler();
 
     public static synchronized ServerSession getServerSession() {
         return serverSession;
@@ -44,7 +48,23 @@ public class MessageHandler extends ProcessingHandler {
 
     @Override
     protected void handleMessage(final int messageId, final ProtocolInputStream rawMessage, final Session session) {
+        ProtocolObject protocolObject = null;
 
+        switch (messageId) {
+            case MessageCode.START_GAME_RS: {
+                protocolObject = new StartGameResponse();
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+
+        if(protocolObject != null) {
+            protocolObject.fromStream(rawMessage);
+            Message message = messageTransitionHandler.obtainMessage(protocolObject.getMessageId(), protocolObject);
+            message.sendToTarget();
+        }
     }
 
     @Override

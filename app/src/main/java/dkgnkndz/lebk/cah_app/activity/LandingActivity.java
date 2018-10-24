@@ -6,19 +6,16 @@ import android.widget.EditText;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dkgnkndz.lebk.cah_app.MyApp;
 import dkgnkndz.lebk.cah_app.R;
 import dkgnkndz.lebk.cah_app.network.thread.NetworkWorker;
 import protocol.object.request.StartGameRequest;
+import protocol.object.response.StartGameResponse;
 
 public class LandingActivity extends ActivityBase {
-
-    private static final String host = "10.0.2.2";
-    private static final int port = 8345;
     
     @BindView(R.id.nickname)
     EditText nickname;
-
-    Thread networkingThread;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -29,15 +26,19 @@ public class LandingActivity extends ActivityBase {
     }
 
     public void play(final View view) {
-        if(networkingThread == null) {
+        MyApp myApp = (MyApp)getApplication();
+
+        if(myApp.getNetworkingThread() == null) {
             final String nickName = this.nickname.getText().toString();
 
             final StartGameRequest startGameRequest = new StartGameRequest();
             startGameRequest.nickName = nickName;
 
-            final NetworkWorker networkWorker = new NetworkWorker(host, port, startGameRequest);
-            networkingThread = new Thread(networkWorker);
-            networkingThread.start();
+            myApp.createConnection(startGameRequest);
         }
+    }
+
+    public void onStartGame(final StartGameResponse startGameResponse) {
+
     }
 }
