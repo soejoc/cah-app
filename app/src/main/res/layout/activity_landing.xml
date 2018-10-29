@@ -7,7 +7,7 @@
     tools:context=".activity.LandingActivity">
 
     <EditText
-        android:id="@+id/nickname"
+        android:id="@+id/nicknameEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -23,20 +23,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/play"
+        android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:onClick="play"
         android:text="@string/play"
-        app:layout_constraintEnd_toEndOf="@+id/nickname"
-        app:layout_constraintStart_toStartOf="@+id/nickname"
-        app:layout_constraintTop_toBottomOf="@+id/nickname"
-        android:onClick="play"/>
+        app:layout_constraintEnd_toEndOf="@+id/nicknameEdit"
+        app:layout_constraintStart_toStartOf="@+id/nicknameEdit"
+        app:layout_constraintTop_toBottomOf="@+id/nicknameEdit" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/titleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -60,7 +60,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.355"
+        app:layout_constraintVertical_bias="0.276"
         tools:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/waitForGameMessageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/wait_for_game_message"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/waitForGameProgressBar"
+        app:layout_constraintStart_toStartOf="@+id/waitForGameProgressBar"
+        app:layout_constraintTop_toBottomOf="@+id/waitForGameProgressBar" />
 
 </android.support.constraint.ConstraintLayout>
