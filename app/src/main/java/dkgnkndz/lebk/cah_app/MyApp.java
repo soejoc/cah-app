@@ -9,6 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import dkgnkndz.lebk.cah_app.network.thread.NetworkWorker;
 import protocol.object.ProtocolObject;
+import protocol.object.message.ProtocolMessage;
 
 public class MyApp extends Application implements Application.ActivityLifecycleCallbacks{
     private static final String host = "10.0.2.2";
@@ -31,8 +32,8 @@ public class MyApp extends Application implements Application.ActivityLifecycleC
         return currentActivity;
     }
 
-    public void createConnection(final ProtocolObject initialRequest) {
-        final NetworkWorker networkWorker = new NetworkWorker(host, port, initialRequest);
+    public void createConnection(final ProtocolMessage initialMessage) {
+        final NetworkWorker networkWorker = new NetworkWorker(host, port, initialMessage);
         networkingThread = new Thread(networkWorker);
         networkingThread.start();
     }

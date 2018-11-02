@@ -7,12 +7,17 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dkgnkndz.lebk.cah_app.MyApp;
 import dkgnkndz.lebk.cah_app.R;
-import protocol.object.request.StartGameRequest;
-import protocol.object.response.StartGameResponse;
+import protocol.object.message.request.StartGameRequest;
+import protocol.object.message.response.StartGameResponse;
+import protocol.object.model.PlayerModel;
 
 public class LandingActivity extends ActivityBase {
     

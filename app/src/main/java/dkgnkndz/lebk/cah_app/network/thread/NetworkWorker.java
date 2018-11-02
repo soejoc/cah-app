@@ -11,17 +11,17 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import protocol.object.ProtocolObject;
+import protocol.object.message.ProtocolMessage;
 
 public class NetworkWorker implements Runnable {
     private final String host;
     private final int port;
-    private final ProtocolObject initialRequest;
+    private final ProtocolMessage initialMessage;
 
-    public NetworkWorker(final String host, final int port, final ProtocolObject initialRequest) {
+    public NetworkWorker(final String host, final int port, final ProtocolMessage initialMessage) {
         this.host = host;
         this.port = port;
-        this.initialRequest = initialRequest;
+        this.initialMessage = initialMessage;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class NetworkWorker implements Runnable {
                     ch.pipeline().addLast(
                             new MetaDecoder(),
                             new MetaEncoder(),
-                            new MessageHandler(initialRequest)
+                            new MessageHandler(initialMessage)
                     );
                 }
             });

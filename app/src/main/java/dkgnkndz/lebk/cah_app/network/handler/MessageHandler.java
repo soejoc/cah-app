@@ -5,10 +5,11 @@ import android.os.Message;
 import channel_handler.ProcessingHandler;
 import dkgnkndz.lebk.cah_app.network.session.ServerSession;
 import io.netty.channel.ChannelHandlerContext;
-import protocol.MessageCode;
 import protocol.object.ProtocolObject;
-import protocol.object.error.ErrorObject;
-import protocol.object.response.StartGameResponse;
+import protocol.object.message.MessageCode;
+import protocol.object.message.ProtocolMessage;
+import protocol.object.message.error.ErrorObject;
+import protocol.object.message.response.StartGameResponse;
 import session.Session;
 import util.ProtocolInputStream;
 
@@ -25,10 +26,10 @@ public class MessageHandler extends ProcessingHandler {
         MessageHandler.serverSession = serverSession;
     }
 
-    private final ProtocolObject initialRequest;
+    private final ProtocolMessage initialMessage;
 
-    public MessageHandler(final ProtocolObject initialRequest) {
-        this.initialRequest = initialRequest;
+    public MessageHandler(final ProtocolMessage initialMessage) {
+        this.initialMessage = initialMessage;
     }
 
     @Override
@@ -36,8 +37,8 @@ public class MessageHandler extends ProcessingHandler {
         final ServerSession serverSession = new ServerSession(ctx);
         setServerSession(serverSession);
 
-        if(initialRequest != null) {
-            serverSession.say(initialRequest);
+        if(initialMessage != null) {
+            serverSession.say(initialMessage);
         }
     }
 

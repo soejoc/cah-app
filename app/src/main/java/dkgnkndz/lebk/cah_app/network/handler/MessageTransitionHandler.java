@@ -7,9 +7,9 @@ import android.os.Message;
 import dkgnkndz.lebk.cah_app.MyApp;
 import dkgnkndz.lebk.cah_app.activity.ActivityBase;
 import dkgnkndz.lebk.cah_app.activity.LandingActivity;
-import protocol.MessageCode;
 import protocol.object.ProtocolObject;
-import protocol.object.response.StartGameResponse;
+import protocol.object.message.MessageCode;
+import protocol.object.message.response.StartGameResponse;
 
 public class MessageTransitionHandler extends Handler {
     public MessageTransitionHandler() {
