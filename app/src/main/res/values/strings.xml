@@ -4,4 +4,6 @@
     <string name="play">Play</string>
     <string name="title">Cards Against Humanity</string>
     <string name="wait_for_game_message">Waiting for game to start...</string>
+    <string name="title_activity_main">Cards Against Humanity</string>
+    <string name="action_settings">Settings</string>
 </resources>

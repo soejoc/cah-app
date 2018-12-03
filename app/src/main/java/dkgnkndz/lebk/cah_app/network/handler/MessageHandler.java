@@ -16,8 +16,6 @@ import util.ProtocolInputStream;
 public class MessageHandler extends ProcessingHandler {
     private static ServerSession serverSession;
 
-    private MessageTransitionHandler messageTransitionHandler = new MessageTransitionHandler();
-
     public static synchronized ServerSession getServerSession() {
         return serverSession;
     }
@@ -27,9 +25,11 @@ public class MessageHandler extends ProcessingHandler {
     }
 
     private final ProtocolMessage initialMessage;
+    private MessageTransitionHandler messageTransitionHandler;
 
-    public MessageHandler(final ProtocolMessage initialMessage) {
+    public MessageHandler(final ProtocolMessage initialMessage, final ResponseMessageHandler responseMessageHandler) {
         this.initialMessage = initialMessage;
+        messageTransitionHandler = new MessageTransitionHandler(responseMessageHandler);
     }
 
     @Override

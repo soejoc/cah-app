@@ -4,16 +4,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import dkgnkndz.lebk.cah_app.MyApp;
-import dkgnkndz.lebk.cah_app.activity.ActivityBase;
-import dkgnkndz.lebk.cah_app.activity.LandingActivity;
 import protocol.object.ProtocolObject;
 import protocol.object.message.MessageCode;
 import protocol.object.message.response.StartGameResponse;
 
 public class MessageTransitionHandler extends Handler {
-    public MessageTransitionHandler() {
+    private final ResponseMessageHandler responseMessageHandler;
+
+    public MessageTransitionHandler(final ResponseMessageHandler responseMessageHandler) {
         super(Looper.getMainLooper());
+
+        this.responseMessageHandler = responseMessageHandler;
     }
 
     @Override
@@ -21,21 +22,15 @@ public class MessageTransitionHandler extends Handler {
         final ProtocolObject protocolObject = (ProtocolObject)msg.obj;
         final int messageId = msg.what;
 
-        if(!(MyApp.getCurrentActivity() instanceof ActivityBase)){
-            return;
-        }
-
-        final ActivityBase activityBase = (ActivityBase) MyApp.getCurrentActivity();
-
         switch (messageId) {
             case MessageCode.START_GAME_RS: {
                 final StartGameResponse startGameResponse = (StartGameResponse)protocolObject;
-                ((LandingActivity)activityBase).onStartGame(startGameResponse);
+                responseMessageHandler.onStartGame(startGameResponse);
                 break;
             }
 
             case MessageCode.WAIT_FOR_GAME_RS: {
-                ((LandingActivity)activityBase).onWaitForGame();
+                responseMessageHandler.onWaitForGame();
                 break;
             }
 

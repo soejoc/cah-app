@@ -3,6 +3,7 @@ package dkgnkndz.lebk.cah_app.network.thread;
 import codec.decoder.meta.MetaDecoder;
 import codec.encoder.meta.MetaEncoder;
 import dkgnkndz.lebk.cah_app.network.handler.MessageHandler;
+import dkgnkndz.lebk.cah_app.network.handler.ResponseMessageHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -17,11 +18,13 @@ public class NetworkWorker implements Runnable {
     private final String host;
     private final int port;
     private final ProtocolMessage initialMessage;
+    private final ResponseMessageHandler responseMessageHandler;
 
-    public NetworkWorker(final String host, final int port, final ProtocolMessage initialMessage) {
+    public NetworkWorker(final String host, final int port, final ProtocolMessage initialMessage, final ResponseMessageHandler responseMessageHandler) {
         this.host = host;
         this.port = port;
         this.initialMessage = initialMessage;
+        this.responseMessageHandler = responseMessageHandler;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class NetworkWorker implements Runnable {
                     ch.pipeline().addLast(
                             new MetaDecoder(),
                             new MetaEncoder(),
-                            new MessageHandler(initialMessage)
+                            new MessageHandler(initialMessage, responseMessageHandler)
                     );
                 }
             });

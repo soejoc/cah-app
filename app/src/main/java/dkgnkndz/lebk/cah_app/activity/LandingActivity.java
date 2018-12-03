@@ -1,72 +1,47 @@
 package dkgnkndz.lebk.cah_app.activity;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dkgnkndz.lebk.cah_app.MyApp;
 import dkgnkndz.lebk.cah_app.R;
-import protocol.object.message.request.StartGameRequest;
+import dkgnkndz.lebk.cah_app.fragment.StartGameFragment;
+import dkgnkndz.lebk.cah_app.fragment.WaitForGameFragment;
+import dkgnkndz.lebk.cah_app.network.handler.ResponseMessageHandler;
 import protocol.object.message.response.StartGameResponse;
-import protocol.object.model.PlayerModel;
 
-public class LandingActivity extends ActivityBase {
-    
-    @BindView(R.id.nicknameEdit)
-    EditText nicknameEdit;
+public class LandingActivity extends AppCompatActivity implements ResponseMessageHandler {
 
-    @BindView(R.id.playButton)
-    Button playButton;
-
-    @BindView(R.id.waitForGameProgressBar)
-    ProgressBar progressBar;
-
-    @BindView(R.id.waitForGameMessageView)
-    TextView waitForGameMessageView;
+    @BindView(R.id.container)
+    ConstraintLayout container;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
         ButterKnife.bind(this);
-    }
 
-    public void play(final View view) {
-        final MyApp myApp = (MyApp)getApplication();
-
-        final String nickName = nicknameEdit.getText().toString();
-        final StartGameRequest startGameRequest = new StartGameRequest();
-        startGameRequest.nickName = nickName;
-
-        if(myApp.getNetworkingThread() == null) {
-            myApp.createConnection(startGameRequest);
-        } else {
-            request(startGameRequest);
+        if(savedInstanceState == null) {
+            final FragmentManager fragmentManager = getSupportFragmentManager();
+            final StartGameFragment startGameFragment = new StartGameFragment();
+            fragmentManager.beginTransaction().add(R.id.container, startGameFragment).commit();
         }
     }
 
+    @Override
     public void onStartGame(final StartGameResponse startGameResponse) {
 
     }
 
+    @Override
     public void onWaitForGame() {
-        toggleVisibility();
-    }
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final WaitForGameFragment waitForGameFragment = new WaitForGameFragment();
 
-    private void toggleVisibility() {
-        nicknameEdit.setVisibility((nicknameEdit.getVisibility() == View.VISIBLE) ? View.INVISIBLE : View.VISIBLE);
-        playButton.setVisibility((playButton.getVisibility() == View.VISIBLE) ? View.INVISIBLE : View.VISIBLE);
-        progressBar.setVisibility((progressBar.getVisibility() == View.VISIBLE) ? View.INVISIBLE : View.VISIBLE);
-        waitForGameMessageView.setVisibility((waitForGameMessageView.getVisibility() == View.VISIBLE) ? View.INVISIBLE : View.VISIBLE);
+        fragmentManager.beginTransaction().replace(R.id.container, waitForGameFragment).commit();
     }
 }
