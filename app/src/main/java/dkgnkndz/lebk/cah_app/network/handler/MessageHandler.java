@@ -14,15 +14,6 @@ import session.Session;
 import util.ProtocolInputStream;
 
 public class MessageHandler extends ProcessingHandler {
-    private static ServerSession serverSession;
-
-    public static synchronized ServerSession getServerSession() {
-        return serverSession;
-    }
-
-    public static synchronized void setServerSession(final ServerSession serverSession) {
-        MessageHandler.serverSession = serverSession;
-    }
 
     private final ProtocolMessage initialMessage;
     private MessageTransitionHandler messageTransitionHandler;
@@ -35,7 +26,6 @@ public class MessageHandler extends ProcessingHandler {
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
         final ServerSession serverSession = new ServerSession(ctx);
-        setServerSession(serverSession);
 
         if(initialMessage != null) {
             serverSession.say(initialMessage);
@@ -44,16 +34,16 @@ public class MessageHandler extends ProcessingHandler {
 
     @Override
     protected Session getSession(final ChannelHandlerContext ctx) {
-        return serverSession;
+        return ServerSession.getServerSession();
     }
 
     @Override
     protected void handleMessage(final int messageId, final ProtocolInputStream rawMessage, final Session session) {
-        ProtocolObject protocolObject = null;
+        ProtocolMessage protocolMessage = null;
 
         switch (messageId) {
             case MessageCode.START_GAME_RS: {
-                protocolObject = new StartGameResponse();
+                protocolMessage = new StartGameResponse();
                 break;
             }
 
@@ -62,11 +52,11 @@ public class MessageHandler extends ProcessingHandler {
             }
         }
 
-        if(protocolObject != null) {
-            protocolObject.fromStream(rawMessage);
+        if(protocolMessage != null) {
+            protocolMessage.fromStream(rawMessage);
         }
 
-        final Message message = messageTransitionHandler.obtainMessage(messageId, protocolObject);
+        final Message message = messageTransitionHandler.obtainMessage(messageId, protocolMessage);
         message.sendToTarget();
     }
 

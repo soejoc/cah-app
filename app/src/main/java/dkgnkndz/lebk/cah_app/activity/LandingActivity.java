@@ -10,16 +10,14 @@ import butterknife.ButterKnife;
 import dkgnkndz.lebk.cah_app.R;
 import dkgnkndz.lebk.cah_app.fragment.StartGameFragment;
 import dkgnkndz.lebk.cah_app.fragment.WaitForGameFragment;
-import dkgnkndz.lebk.cah_app.network.handler.ResponseMessageHandler;
-import protocol.object.message.response.StartGameResponse;
 
-public class LandingActivity extends AppCompatActivity implements ResponseMessageHandler {
+public class LandingActivity extends AppCompatActivity {
 
     @BindView(R.id.container)
     ConstraintLayout container;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
@@ -32,13 +30,7 @@ public class LandingActivity extends AppCompatActivity implements ResponseMessag
         }
     }
 
-    @Override
-    public void onStartGame(final StartGameResponse startGameResponse) {
-
-    }
-
-    @Override
-    public void onWaitForGame() {
+    public void switchToWaitForGameFragment() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final WaitForGameFragment waitForGameFragment = new WaitForGameFragment();
 

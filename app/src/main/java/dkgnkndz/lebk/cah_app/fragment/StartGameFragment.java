@@ -12,8 +12,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dkgnkndz.lebk.cah_app.MyApp;
 import dkgnkndz.lebk.cah_app.R;
+import dkgnkndz.lebk.cah_app.activity.LandingActivity;
 import dkgnkndz.lebk.cah_app.network.handler.ResponseMessageHandler;
+import protocol.object.message.MessageCode;
+import protocol.object.message.ProtocolMessage;
 import protocol.object.message.request.StartGameRequest;
+import protocol.object.message.response.StartGameResponse;
 
 public class StartGameFragment extends FragmentBase {
 
@@ -45,7 +49,7 @@ public class StartGameFragment extends FragmentBase {
                   startGameRequest.nickName = nickName;
 
                   if(myApp.getNetworkingThread() == null) {
-                      myApp.createConnection(startGameRequest, (ResponseMessageHandler)getActivity());
+                      myApp.createConnection(startGameRequest, new StartGameResponseHandler());
                   } else {
                       request(startGameRequest);
                   }
@@ -54,5 +58,39 @@ public class StartGameFragment extends FragmentBase {
         );
 
         return view;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    class StartGameResponseHandler extends ResponseMessageHandler {
+        @Override
+        protected void handleMessage(final int messageId, final ProtocolMessage protocolMessage) {
+            switch (messageId) {
+                case MessageCode.START_GAME_RS: {
+                    final StartGameResponse startGameResponse = (StartGameResponse)protocolMessage;
+                    onStartGame(startGameResponse);
+
+                    break;
+                }
+
+                case MessageCode.WAIT_FOR_GAME_RS: {
+                    waitForGame();
+
+                    break;
+                }
+
+                default: break;
+            }
+        }
+
+
+        private void onStartGame(final StartGameResponse startGameResponse) {
+
+        }
+
+        private void waitForGame() {
+            final LandingActivity landingActivity = (LandingActivity)getActivity();
+            landingActivity.switchToWaitForGameFragment();
+        }
     }
 }

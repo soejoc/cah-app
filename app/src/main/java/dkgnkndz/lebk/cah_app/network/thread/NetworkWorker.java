@@ -53,7 +53,7 @@ public class NetworkWorker implements Runnable {
 
             f.channel().closeFuture().sync();
         } catch (final InterruptedException e) {
-            MessageHandler.setServerSession(null);
+
         }
         finally {
             workerGroup.shutdownGracefully();
