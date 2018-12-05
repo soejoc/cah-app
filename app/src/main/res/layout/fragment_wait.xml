@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        android:id="@+id/waitForGameProgressBar"
+        android:id="@+id/waitProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -22,14 +22,13 @@
         tools:visibility="visible" />
 
     <TextView
-        android:id="@+id/waitForGameMessageView"
+        android:id="@+id/waitMessageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="@string/wait_for_game_message"
         android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@+id/waitForGameProgressBar"
-        app:layout_constraintStart_toStartOf="@+id/waitForGameProgressBar"
-        app:layout_constraintTop_toBottomOf="@+id/waitForGameProgressBar" />
+        app:layout_constraintEnd_toEndOf="@+id/waitProgressBar"
+        app:layout_constraintStart_toStartOf="@+id/waitProgressBar"
+        app:layout_constraintTop_toBottomOf="@+id/waitProgressBar" />
 
 </android.support.constraint.ConstraintLayout>
