@@ -1,4 +1,4 @@
-package dkgnkndz.lebk.cah_app.backend.local.session;
+package dkgnkndz.lebk.cah_app.backend.local.session_key;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;

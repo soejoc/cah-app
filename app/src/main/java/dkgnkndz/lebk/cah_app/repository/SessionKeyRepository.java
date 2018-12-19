@@ -3,8 +3,9 @@ package dkgnkndz.lebk.cah_app.repository;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dkgnkndz.lebk.cah_app.backend.local.session.SessionKey;
-import dkgnkndz.lebk.cah_app.backend.local.session.SessionKeyDao;
+import dkgnkndz.lebk.cah_app.backend.local.session_key.SessionKey;
+import dkgnkndz.lebk.cah_app.backend.local.session_key.SessionKeyDao;
+import io.reactivex.Maybe;
 
 @Singleton
 public class SessionKeyRepository {
@@ -15,7 +16,7 @@ public class SessionKeyRepository {
         this.sessionKeyDao = sessionKeyDao;
     }
 
-    public SessionKey getSessionKey() {
+    public Maybe<SessionKey> getSessionKey() {
         return sessionKeyDao.getSessionKey();
     }
 
