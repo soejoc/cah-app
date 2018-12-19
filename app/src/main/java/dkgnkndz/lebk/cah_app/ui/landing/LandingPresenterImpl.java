@@ -82,7 +82,9 @@ public class LandingPresenterImpl implements LandingPresenter {
                         new Consumer<StartGameResponse>() {
                             @Override
                             public void accept(final StartGameResponse startGameResponse) throws Exception {
-                                // ToDo
+                                final SessionKey sessionKey = new SessionKey();
+                                sessionKey.setSessionKey(startGameResponse.sessionId);
+                                sessionKeyRepository.saveSessionKey(sessionKey);
                             }
                         },
                         new Consumer<Throwable>() {
@@ -106,7 +108,7 @@ public class LandingPresenterImpl implements LandingPresenter {
                             public void accept(final FinishedGameResponse finishedGameResponse) throws Exception {
                                 landingView.showStartGameFragment();
 
-                                //ToDo: Delete sessionkey
+                                sessionKeyRepository.deleteSessionKey();
                             }
                         },
                         new Consumer<Throwable>() {
