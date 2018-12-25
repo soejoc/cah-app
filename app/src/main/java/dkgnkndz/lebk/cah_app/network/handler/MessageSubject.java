@@ -7,7 +7,7 @@ import protocol.object.message.response.StartGameResponse;
 import protocol.object.message.response.WaitForGameResponse;
 
 public final class MessageSubject {
-    public static Subject<StartGameResponse> startGameResponseSubject = PublishSubject.create();
+    public static final Subject<StartGameResponse> startGameResponseSubject = PublishSubject.create();
     public static Subject<WaitForGameResponse> waitForGameResponseSubject = PublishSubject.create();
     public static Subject<FinishedGameResponse> finishedGameResponseSubject = PublishSubject.create();
 }

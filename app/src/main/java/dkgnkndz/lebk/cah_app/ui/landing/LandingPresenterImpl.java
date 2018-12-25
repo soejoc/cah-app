@@ -6,13 +6,13 @@ import javax.inject.Inject;
 
 import dkgnkndz.lebk.cah_app.MyApp;
 import dkgnkndz.lebk.cah_app.R;
-import dkgnkndz.lebk.cah_app.backend.local.session_key.SessionKey;
+import dkgnkndz.lebk.cah_app.backend.local.entity.session_key.SessionKey;
 import dkgnkndz.lebk.cah_app.network.handler.MessageSubject;
 import dkgnkndz.lebk.cah_app.repository.SessionKeyRepository;
+import dkgnkndz.lebk.cah_app.repository.WhiteCardRepository;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import protocol.object.message.request.RestartGameRequest;
 import protocol.object.message.response.FinishedGameResponse;
@@ -22,25 +22,51 @@ import protocol.object.message.response.WaitForGameResponse;
 public class LandingPresenterImpl implements LandingPresenter {
     private final LandingView landingView;
     private final SessionKeyRepository sessionKeyRepository;
-    private final CompositeDisposable compositeDisposable;
+    private final WhiteCardRepository whiteCardRepository;
     private final MyApp myApp;
+    private final CompositeDisposable compositeDisposable;
 
     private static final String TAG = "LandingPresenterImpl";
 
     @Inject
-    public LandingPresenterImpl(final LandingView landingView, final SessionKeyRepository sessionKeyRepository, final MyApp myApp) {
+    public LandingPresenterImpl(final LandingView landingView, final SessionKeyRepository sessionKeyRepository, final WhiteCardRepository whiteCardRepository, final MyApp myApp) {
         this.landingView = landingView;
         this.sessionKeyRepository = sessionKeyRepository;
-        this.compositeDisposable = new CompositeDisposable();
+        this.whiteCardRepository = whiteCardRepository;
         this.myApp = myApp;
+        this.compositeDisposable = new CompositeDisposable();
     }
 
     @Override
     public void onStart() {
-        subscribeToWaitForGame();
-        subscribeToStartGame();
-        subscribeToFinishedGame();
-        subscribeToLoadSessionKey();
+        final Disposable waitForGameDisposable = MessageSubject.waitForGameResponseSubject
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onWaitForGame, LandingPresenterImpl::onError);
+
+        addDisposable(waitForGameDisposable);
+
+        final Disposable startGameDisposable = MessageSubject.startGameResponseSubject
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onStartGame, LandingPresenterImpl::onError);
+
+        addDisposable(startGameDisposable);
+
+        final Disposable finishedGameDisposable = MessageSubject.finishedGameResponseSubject
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onFinishedGame, LandingPresenterImpl::onError);
+
+        addDisposable(finishedGameDisposable);
+
+        final Disposable sessionKeyDisposable = sessionKeyRepository.getSessionKey()
+                .subscribeOn(Schedulers.io())
+                .defaultIfEmpty(new SessionKey())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onFetchedSessionKey, LandingPresenterImpl::onError);
+
+        addDisposable(sessionKeyDisposable);
     }
 
     @Override
@@ -52,103 +78,42 @@ public class LandingPresenterImpl implements LandingPresenter {
         compositeDisposable.add(disposable);
     }
 
-    private void subscribeToWaitForGame() {
-        final Disposable disposable = MessageSubject.waitForGameResponseSubject
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        new Consumer<WaitForGameResponse>() {
-                            @Override
-                            public void accept(final WaitForGameResponse waitForGameResponse) throws Exception {
-                                landingView.showWaitFragment(R.string.wait_for_game_message);
-                            }
-                        },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(final Throwable throwable) throws Exception {
-                                Log.d(TAG, throwable.getMessage());
-                            }
-                        }
-                );
-
-        addDisposable(disposable);
+    private static void onError(final Throwable throwable) {
+        Log.d(TAG, throwable.getMessage());
     }
 
-    private void subscribeToStartGame() {
-        final Disposable disposable = MessageSubject.startGameResponseSubject
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        new Consumer<StartGameResponse>() {
-                            @Override
-                            public void accept(final StartGameResponse startGameResponse) throws Exception {
-                                final SessionKey sessionKey = new SessionKey();
-                                sessionKey.setSessionKey(startGameResponse.sessionId);
-                                sessionKeyRepository.saveSessionKey(sessionKey);
-                            }
-                        },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(final Throwable throwable) throws Exception {
-                                Log.d(TAG, throwable.getMessage());
-                            }
-                        }
-                );
-
-        addDisposable(disposable);
+    private void onWaitForGame(final WaitForGameResponse waitForGameResponse) {
+        landingView.showWaitFragment(R.string.wait_for_game_message);
     }
 
-    private void subscribeToFinishedGame() {
-        final Disposable disposable = MessageSubject.finishedGameResponseSubject
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        new Consumer<FinishedGameResponse>() {
-                            @Override
-                            public void accept(final FinishedGameResponse finishedGameResponse) throws Exception {
-                                landingView.showStartGameFragment();
-
-                                sessionKeyRepository.deleteSessionKey();
-                            }
-                        },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(final Throwable throwable) throws Exception {
-                                Log.d(TAG, throwable.getMessage());
-                            }
-                        }
-                );
-
-        addDisposable(disposable);
+    private void onStartGame(final StartGameResponse startGameResponse) {
+        final SessionKey sessionKey = new SessionKey();
+        sessionKey.setSessionKey(startGameResponse.sessionId);
+        sessionKeyRepository.saveSessionKey(sessionKey);
     }
 
-    private void subscribeToLoadSessionKey() {
-        final Disposable disposable = sessionKeyRepository.getSessionKey()
-                .subscribeOn(Schedulers.io())
-                .defaultIfEmpty(new SessionKey())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        new Consumer<SessionKey>() {
-                            @Override
-                            public void accept(final SessionKey sessionKey) throws Exception {
-                                if(sessionKey.getSessionKey() != null) {
-                                    final RestartGameRequest restartGameRequest = new RestartGameRequest();
-                                    restartGameRequest.sessionKey = sessionKey.getSessionKey();
+    private void onFinishedGame(final FinishedGameResponse finishedGameResponse) {
+        landingView.showStartGameFragment();
+        sessionKeyRepository.deleteSessionKey();
+    }
 
-                                    myApp.createConnection(restartGameRequest);
-                                } else {
-                                    landingView.showStartGameFragment();
-                                }
-                            }
-                        },
-                        new Consumer<Throwable>() {
-                            @Override
-                            public void accept(final Throwable throwable) throws Exception {
-                                Log.d(TAG, throwable.getMessage());
-                            }
-                        }
-                );
+    private void onFetchedSessionKey(final SessionKey sessionKey) {
+        if (sessionKey.getSessionKey() != null) {
+            final RestartGameRequest restartGameRequest = new RestartGameRequest();
+            restartGameRequest.sessionKey = sessionKey.getSessionKey();
 
-        addDisposable(disposable);
+            myApp.createConnection(restartGameRequest);
+        } else {
+            synchronizeWhiteCards();
+        }
+    }
+
+    private void synchronizeWhiteCards() {
+        whiteCardRepository.synchronize(this::synchronizeBlackCards, AndroidSchedulers.mainThread());
+    }
+
+    private void synchronizeBlackCards() {
+        //ToDo: Schwarze Karten analog zu den weißen Karten synchronisieren. Das Schema für die weißen Katen kann vollständig übernommen werden. Nach dem Synchronisieren der schwarzen Karten soll das StartGameFragment per landingView.showStartGameFragment() angezeigt werden
+        landingView.showStartGameFragment();
     }
 }

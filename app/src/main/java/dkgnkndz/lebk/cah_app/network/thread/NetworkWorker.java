@@ -36,8 +36,7 @@ public class NetworkWorker implements Runnable {
             b.handler(new ChannelInitializer<SocketChannel>() {
 
                 @Override
-                public void initChannel(final SocketChannel ch)
-                        throws Exception {
+                public void initChannel(final SocketChannel ch) {
                     ch.pipeline().addLast(
                             new MetaDecoder(),
                             new MetaEncoder(),

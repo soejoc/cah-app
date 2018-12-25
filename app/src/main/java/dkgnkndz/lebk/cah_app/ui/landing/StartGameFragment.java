@@ -32,28 +32,25 @@ public class StartGameFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_start_game, container, false);
         ButterKnife.bind(this, view);
 
-        playButton.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(final View v) {
-                  final Activity activity = getActivity();
+        playButton.setOnClickListener(v -> {
+            final Activity activity = getActivity();
 
-                  if(activity == null) {
-                      return;
-                  }
+            if(activity == null) {
+                return;
+            }
 
-                  final MyApp myApp = (MyApp)activity.getApplication();
+            final MyApp myApp = (MyApp)activity.getApplication();
 
-                  final String nickName = nicknameEdit.getText().toString();
-                  final StartGameRequest startGameRequest = new StartGameRequest();
-                  startGameRequest.nickName = nickName;
+            final String nickName = nicknameEdit.getText().toString();
+            final StartGameRequest startGameRequest = new StartGameRequest();
+            startGameRequest.nickName = nickName;
 
-                  if(myApp.getNetworkingThread() == null) {
-                      myApp.createConnection(startGameRequest);
-                  } else {
-                      //request(startGameRequest);
-                  }
-              }
-          }
+            if(myApp.getNetworkingThread() == null) {
+                myApp.createConnection(startGameRequest);
+            } else {
+                //request(startGameRequest);
+            }
+        }
         );
 
         return view;

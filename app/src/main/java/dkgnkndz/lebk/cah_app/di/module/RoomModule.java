@@ -8,7 +8,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dkgnkndz.lebk.cah_app.backend.local.CahDatabase;
-import dkgnkndz.lebk.cah_app.backend.local.session_key.SessionKeyDao;
+import dkgnkndz.lebk.cah_app.backend.local.entity.session_key.SessionKeyDao;
+import dkgnkndz.lebk.cah_app.backend.local.entity.white_card.WhiteCardDao;
 
 @Module
 public class RoomModule {
@@ -23,5 +24,11 @@ public class RoomModule {
     @Provides
     SessionKeyDao provideSessionKeyDao(final CahDatabase database) {
         return database.sessionKeyDao();
+    }
+
+    @Singleton
+    @Provides
+    WhiteCardDao provideWhiteCardDao(final CahDatabase database) {
+        return database.whiteCardDao();
     }
 }

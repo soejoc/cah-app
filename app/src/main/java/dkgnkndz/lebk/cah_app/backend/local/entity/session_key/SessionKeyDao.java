@@ -1,4 +1,4 @@
-package dkgnkndz.lebk.cah_app.backend.local.session_key;
+package dkgnkndz.lebk.cah_app.backend.local.entity.session_key;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
@@ -10,11 +10,11 @@ import io.reactivex.Maybe;
 @Dao
 public interface SessionKeyDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long save(final SessionKey sessionKey);
+    void save(final SessionKey sessionKey);
 
     @Query("SELECT * FROM SessionKey LIMIT 1")
     Maybe<SessionKey> getSessionKey();
 
     @Query("DELETE FROM SessionKey")
-    int delete();
+    void delete();
 }

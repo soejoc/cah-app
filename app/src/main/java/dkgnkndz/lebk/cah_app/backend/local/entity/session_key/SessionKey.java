@@ -1,4 +1,4 @@
-package dkgnkndz.lebk.cah_app.backend.local.session_key;
+package dkgnkndz.lebk.cah_app.backend.local.entity.session_key;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
@@ -13,6 +13,7 @@ public class SessionKey {
     @PrimaryKey
     private UUID sessionKey;
 
+    @NonNull
     public UUID getSessionKey() {
         return sessionKey;
     }

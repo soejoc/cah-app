@@ -1,14 +1,12 @@
 package dkgnkndz.lebk.cah_app.repository;
 
-import java.util.concurrent.Callable;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dkgnkndz.lebk.cah_app.backend.local.session_key.SessionKey;
-import dkgnkndz.lebk.cah_app.backend.local.session_key.SessionKeyDao;
+import dkgnkndz.lebk.cah_app.backend.local.entity.session_key.SessionKey;
+import dkgnkndz.lebk.cah_app.backend.local.entity.session_key.SessionKeyDao;
+import io.reactivex.Completable;
 import io.reactivex.Maybe;
-import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
 @Singleton
@@ -25,22 +23,14 @@ public class SessionKeyRepository {
     }
 
     public void saveSessionKey(final SessionKey sessionKey) {
-        Observable.fromCallable(new Callable<Long>() {
-            @Override
-            public Long call() {
-                return sessionKeyDao.save(sessionKey);
-            }})
+        Completable.fromAction(() -> sessionKeyDao.save(sessionKey))
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe();
     }
 
     public void deleteSessionKey() {
-        Observable.fromCallable(new Callable<Integer>() {
-            @Override
-            public Integer call() {
-                return sessionKeyDao.delete();
-            }})
+        Completable.fromAction(sessionKeyDao::delete)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe();
