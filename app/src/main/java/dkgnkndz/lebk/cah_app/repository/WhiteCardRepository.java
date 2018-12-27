@@ -42,7 +42,7 @@ public class WhiteCardRepository {
                 .observeOn(Schedulers.io())
                 .subscribe(
                         whiteCardsHash -> {
-                            final String hash = whiteCardsHash.getHash();
+                            final Integer hash = whiteCardsHash.getHash();
                             boolean needsSynchronization;
 
                             if(hash != null) {

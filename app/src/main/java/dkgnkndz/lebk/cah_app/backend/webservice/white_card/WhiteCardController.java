@@ -29,7 +29,7 @@ public class WhiteCardController extends BaseController {
         return whiteCardAPI.getWhiteCards();
     }
 
-    public Single<CheckHashResponse> checkHash(final String hash) {
+    public Single<CheckHashResponse> checkHash(final int hash) {
         final CheckHashRequest checkHashRequest = new CheckHashRequest(hash);
         return whiteCardAPI.checkHash(checkHashRequest);
     }
