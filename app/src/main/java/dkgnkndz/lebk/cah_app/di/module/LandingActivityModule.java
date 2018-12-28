@@ -4,6 +4,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dkgnkndz.lebk.cah_app.MyApp;
+import dkgnkndz.lebk.cah_app.repository.BlackCardRepository;
 import dkgnkndz.lebk.cah_app.repository.SessionKeyRepository;
 import dkgnkndz.lebk.cah_app.repository.WhiteCardRepository;
 import dkgnkndz.lebk.cah_app.ui.landing.LandingActivity;
@@ -18,7 +19,7 @@ public abstract class LandingActivityModule {
     abstract LandingView bindLandingView(final LandingActivity landingActivity);
 
     @Provides
-    static LandingPresenter provideLandingPresenter(final LandingView landingView, final SessionKeyRepository sessionKeyRepository, final WhiteCardRepository whiteCardRepository, final MyApp myApp) {
-        return new LandingPresenterImpl(landingView, sessionKeyRepository, whiteCardRepository, myApp);
+    static LandingPresenter provideLandingPresenter(final LandingView landingView, final SessionKeyRepository sessionKeyRepository, final WhiteCardRepository whiteCardRepository, final BlackCardRepository blackCardRepository, final MyApp myApp) {
+        return new LandingPresenterImpl(landingView, sessionKeyRepository, whiteCardRepository, blackCardRepository, myApp);
     }
 }

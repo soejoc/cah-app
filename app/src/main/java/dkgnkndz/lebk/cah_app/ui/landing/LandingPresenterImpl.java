@@ -8,6 +8,7 @@ import dkgnkndz.lebk.cah_app.MyApp;
 import dkgnkndz.lebk.cah_app.R;
 import dkgnkndz.lebk.cah_app.backend.local.entity.session_key.SessionKey;
 import dkgnkndz.lebk.cah_app.network.handler.MessageSubject;
+import dkgnkndz.lebk.cah_app.repository.BlackCardRepository;
 import dkgnkndz.lebk.cah_app.repository.SessionKeyRepository;
 import dkgnkndz.lebk.cah_app.repository.WhiteCardRepository;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -23,16 +24,18 @@ public class LandingPresenterImpl implements LandingPresenter {
     private final LandingView landingView;
     private final SessionKeyRepository sessionKeyRepository;
     private final WhiteCardRepository whiteCardRepository;
+    private final BlackCardRepository blackCardRepository;
     private final MyApp myApp;
     private final CompositeDisposable compositeDisposable;
 
     private static final String TAG = "LandingPresenterImpl";
 
     @Inject
-    public LandingPresenterImpl(final LandingView landingView, final SessionKeyRepository sessionKeyRepository, final WhiteCardRepository whiteCardRepository, final MyApp myApp) {
+    public LandingPresenterImpl(final LandingView landingView, final SessionKeyRepository sessionKeyRepository, final WhiteCardRepository whiteCardRepository, final BlackCardRepository blackCardRepository, final MyApp myApp) {
         this.landingView = landingView;
         this.sessionKeyRepository = sessionKeyRepository;
         this.whiteCardRepository = whiteCardRepository;
+        this.blackCardRepository = blackCardRepository;
         this.myApp = myApp;
         this.compositeDisposable = new CompositeDisposable();
     }
@@ -105,15 +108,17 @@ public class LandingPresenterImpl implements LandingPresenter {
             myApp.createConnection(restartGameRequest);
         } else {
             synchronizeWhiteCards();
+            synchronizeBlackCards();
         }
     }
 
     private void synchronizeWhiteCards() {
-        whiteCardRepository.synchronize(this::synchronizeBlackCards, AndroidSchedulers.mainThread());
+        whiteCardRepository.synchronize(this::synchronizeWhiteCards, AndroidSchedulers.mainThread());
     }
 
     private void synchronizeBlackCards() {
         //ToDo: Schwarze Karten analog zu den weißen Karten synchronisieren. Das Schema für die weißen Katen kann vollständig übernommen werden. Nach dem Synchronisieren der schwarzen Karten soll das StartGameFragment per landingView.showStartGameFragment() angezeigt werden
+        blackCardRepository.synchronize(this::synchronizeBlackCards, AndroidSchedulers.mainThread());
         landingView.showStartGameFragment();
     }
 }
