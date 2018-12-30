@@ -27,7 +27,7 @@ public class BlackCardController extends BaseController {
         return blackCardAPI.getBlackCards();
     }
 
-    public Single<CheckHashResponse> checkHash(final String hash) {
+    public Single<CheckHashResponse> checkHash(final int hash) {
         final CheckHashRequest checkHashRequest = new CheckHashRequest(hash);
         return blackCardAPI.checkHash(checkHashRequest);
     }

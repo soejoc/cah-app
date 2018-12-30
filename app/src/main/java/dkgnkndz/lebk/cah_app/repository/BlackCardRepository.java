@@ -41,7 +41,7 @@ public class BlackCardRepository {
                 .observeOn(Schedulers.io())
                 .subscribe(
                         blackCardsHash -> {
-                            final String hash = blackCardsHash.getHash();
+                            final Integer hash = blackCardsHash.getHash();
                             boolean needsSynchronization;
 
                             if(hash != null) {
@@ -63,7 +63,6 @@ public class BlackCardRepository {
 
                                 blackCardDao.deleteHash();
                                 blackCardDao.saveHash(new BlackCardsHash((hashResponse.hash)));
-                                blackCardDao.saveHash(new BlackCardsHash(hashResponse.hash));
                             }
 
                             Completable.fromAction(action)

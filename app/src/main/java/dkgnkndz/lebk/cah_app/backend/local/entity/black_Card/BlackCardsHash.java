@@ -10,21 +10,21 @@ public class BlackCardsHash {
 
     @NonNull
     @PrimaryKey
-    private String hash;
+    private Integer hash;
 
     public BlackCardsHash() {}
 
     @Ignore
-    public BlackCardsHash(final String hash) {
+    public BlackCardsHash(final Integer hash) {
         this.hash = hash;
     }
 
     @NonNull
-    public String getHash() {
+    public Integer getHash() {
         return hash;
     }
 
-    public void setHash(@NonNull final String hash) {
+    public void setHash(@NonNull final Integer hash) {
         this.hash = hash;
     }
 }
