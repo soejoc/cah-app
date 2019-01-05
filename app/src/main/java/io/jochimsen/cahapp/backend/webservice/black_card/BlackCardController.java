@@ -3,6 +3,7 @@ package io.jochimsen.cahapp.backend.webservice.black_card;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.jochimsen.cahapp.backend.webservice.BaseController;
 import io.jochimsen.cahapp.backend.webservice.black_card.response.BlackCardResponse;
@@ -11,6 +12,7 @@ import io.jochimsen.cahapp.backend.webservice.global.response.CheckHashResponse;
 import io.jochimsen.cahapp.backend.webservice.global.response.HashResponse;
 import io.reactivex.Single;
 
+@Singleton
 public class BlackCardController extends BaseController {
     private static final String NAMESPACE = "blackCard";
 
