@@ -13,12 +13,15 @@ public class BlackCard {
     @NonNull
     private String text;
 
+    private int blankCount;
+
     public BlackCard() {}
 
     @Ignore
-    public BlackCard(final long blackCardId, @NonNull final String text) {
+    public BlackCard(final long blackCardId, @NonNull final String text, final int blankCount) {
         this.blackCardId = blackCardId;
         this.text = text;
+        this.blankCount = blankCount;
     }
 
     public long getBlackCardId() {
@@ -36,5 +39,13 @@ public class BlackCard {
 
     public void setText(@NonNull final String text) {
         this.text = text;
+    }
+
+    public int getBlankCount() {
+        return blankCount;
+    }
+
+    public void setBlankCount(final int blankCount) {
+        this.blankCount = blankCount;
     }
 }

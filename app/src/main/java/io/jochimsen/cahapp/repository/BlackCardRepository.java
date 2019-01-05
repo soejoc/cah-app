@@ -55,7 +55,7 @@ public class BlackCardRepository {
                                 final HashResponse<List<BlackCardResponse>> hashResponse = blackCardController.getBlackCards().blockingGet();
 
                                 final List<BlackCard> blackCards = hashResponse.data.stream()
-                                        .map(blackCardResponse -> new BlackCard(blackCardResponse.blackCardId, blackCardResponse.text))
+                                        .map(blackCardResponse -> new BlackCard(blackCardResponse.blackCardId, blackCardResponse.text, blackCardResponse.blankCount))
                                         .collect(Collectors.toList());
 
                                 blackCardDao.delete();
