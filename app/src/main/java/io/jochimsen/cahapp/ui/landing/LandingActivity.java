@@ -1,5 +1,6 @@
 package io.jochimsen.cahapp.ui.landing;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 
@@ -7,6 +8,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import io.jochimsen.cahapp.R;
+import io.jochimsen.cahapp.ui.game.GameActivity;
 
 public class LandingActivity extends DaggerAppCompatActivity implements LandingView {
 
@@ -52,5 +54,13 @@ public class LandingActivity extends DaggerAppCompatActivity implements LandingV
         }
 
         fragmentManager.beginTransaction().replace(R.id.container, waitFragment).commit();
+    }
+
+    @Override
+    public void startGameActivity() {
+        final Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
+
+        finish();
     }
 }

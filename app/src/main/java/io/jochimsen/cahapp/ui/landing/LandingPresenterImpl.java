@@ -93,6 +93,8 @@ public class LandingPresenterImpl implements LandingPresenter {
         final SessionKey sessionKey = new SessionKey();
         sessionKey.setSessionKey(startGameResponse.sessionId);
         sessionKeyRepository.saveSessionKey(sessionKey);
+
+        landingView.startGameActivity();
     }
 
     private void onFinishedGame(final FinishedGameResponse finishedGameResponse) {
