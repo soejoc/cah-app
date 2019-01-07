@@ -21,6 +21,9 @@ public interface BlackCardDao {
     @Query("SELECT * FROM BlackCard")
     Single<List<BlackCard>> get();
 
+    @Query("SELECT * FROM BlackCard WHERE blackCardId = :blackCardId")
+    Single<BlackCard> get(final long blackCardId);
+
     @Query("SELECT * FROM BlackCardsHash LIMIT 1")
     Maybe<BlackCardsHash> getHash();
 

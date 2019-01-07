@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.R;
+import io.jochimsen.cahapp.network.handler.MessageHandler;
 import io.jochimsen.cahframework.protocol.object.message.request.StartGameRequest;
 
 public class StartGameFragment extends Fragment {
@@ -45,7 +46,7 @@ public class StartGameFragment extends Fragment {
             if(myApp.getNetworkingThread() == null) {
                 myApp.createConnection(startGameRequest);
             } else {
-                //request(startGameRequest);
+                MessageHandler.getServerSession().say(startGameRequest);
             }
         }
         );

@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import io.jochimsen.cahapp.R;
+import io.jochimsen.cahapp.ui.WaitFragment;
 import io.jochimsen.cahapp.ui.game.GameActivity;
 
 public class LandingActivity extends DaggerAppCompatActivity implements LandingView {

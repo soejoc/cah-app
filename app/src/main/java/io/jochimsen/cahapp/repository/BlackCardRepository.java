@@ -17,6 +17,7 @@ import io.jochimsen.cahapp.backend.webservice.global.response.CheckHashResponse;
 import io.jochimsen.cahapp.backend.webservice.global.response.HashResponse;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
+import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
@@ -71,5 +72,9 @@ public class BlackCardRepository {
                         },
                         throwable -> Log.d(TAG, throwable.getMessage())
                 );
+    }
+
+    public Single<BlackCard> get(final long blackCardId) {
+        return blackCardDao.get(blackCardId);
     }
 }

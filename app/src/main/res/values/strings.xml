@@ -5,4 +5,6 @@
     <string name="wait_for_game_message">Waiting for game to start…</string>
     <string name="title_activity_main">Cards Against Humanity</string>
     <string name="title_activity_game">Game</string>
+    <string name="wait_on_players">Waiting on players…</string>
+    <string name="wait_on_game_master">Waiting on game master…</string>
 </resources>

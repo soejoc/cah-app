@@ -1,11 +1,16 @@
 package io.jochimsen.cahapp.network.handler;
 
+import android.util.Log;
+
 import io.jochimsen.cahapp.network.session.ServerSession;
 import io.jochimsen.cahframework.channel_handler.ProcessingHandler;
 import io.jochimsen.cahframework.protocol.object.message.MessageCode;
 import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
 import io.jochimsen.cahframework.protocol.object.message.error.ErrorObject;
+import io.jochimsen.cahframework.protocol.object.message.response.AddCardsResponse;
 import io.jochimsen.cahframework.protocol.object.message.response.FinishedGameResponse;
+import io.jochimsen.cahframework.protocol.object.message.response.GameMasterResponse;
+import io.jochimsen.cahframework.protocol.object.message.response.SelectCardResponse;
 import io.jochimsen.cahframework.protocol.object.message.response.StartGameResponse;
 import io.jochimsen.cahframework.protocol.object.message.response.WaitForGameResponse;
 import io.jochimsen.cahframework.session.Session;
@@ -13,6 +18,8 @@ import io.jochimsen.cahframework.util.ProtocolInputStream;
 import io.netty.channel.ChannelHandlerContext;
 
 public class MessageHandler extends ProcessingHandler {
+
+    private static final String TAG = "MessageHandler";
 
     private static ServerSession serverSession;
 
@@ -42,6 +49,8 @@ public class MessageHandler extends ProcessingHandler {
 
     @Override
     protected void handleMessage(final int messageId, final ProtocolInputStream rawMessage, final Session session) {
+        Log.d(TAG, String.format("MessageId: %d", messageId));
+
         switch (messageId) {
             case MessageCode.START_GAME_RS: {
                 final StartGameResponse startGameResponse = new StartGameResponse();
@@ -66,7 +75,33 @@ public class MessageHandler extends ProcessingHandler {
                 MessageSubject.finishedGameResponseSubject.onNext(finishedGameResponse);
                 break;
             }
+
+            case MessageCode.ADD_CARDS_RS: {
+                final AddCardsResponse addCardsResponse = new AddCardsResponse();
+                addCardsResponse.fromStream(rawMessage);
+
+                MessageSubject.addCardsResponseSubject.onNext(addCardsResponse);
+                break;
+            }
+
+            case MessageCode.GAME_MASTER_RS: {
+                final GameMasterResponse gameMasterResponse = new GameMasterResponse();
+                gameMasterResponse.fromStream(rawMessage);
+
+                MessageSubject.gameMasterResponseSubject.onNext(gameMasterResponse);
+                break;
+            }
+
+            case MessageCode.SELECT_CARD_RS: {
+                final SelectCardResponse selectCardResponse = new SelectCardResponse();
+                selectCardResponse.fromStream(rawMessage);
+
+                MessageSubject.selectCardResponseSubject.onNext(selectCardResponse);
+                break;
+            }
+
             default: {
+                Log.i(TAG, String.format("Logged unknown message: %d", messageId));
                 break;
             }
         }

@@ -17,6 +17,7 @@ import io.jochimsen.cahapp.backend.webservice.white_card.WhiteCardController;
 import io.jochimsen.cahapp.backend.webservice.white_card.response.WhiteCardResponse;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
+import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
@@ -71,5 +72,9 @@ public class WhiteCardRepository {
                         },
                         throwable -> Log.d(TAG, throwable.getMessage())
                 );
+    }
+
+    public Single<WhiteCard> get(final long whiteCardId) {
+        return whiteCardDao.get(whiteCardId);
     }
 }

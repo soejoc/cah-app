@@ -2,13 +2,18 @@ package io.jochimsen.cahapp.ui.landing;
 
 import android.util.Log;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 
 import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.R;
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKey;
+import io.jochimsen.cahapp.model.PlayerModel;
 import io.jochimsen.cahapp.network.handler.MessageSubject;
 import io.jochimsen.cahapp.repository.BlackCardRepository;
+import io.jochimsen.cahapp.repository.PlayerRepository;
 import io.jochimsen.cahapp.repository.SessionKeyRepository;
 import io.jochimsen.cahapp.repository.WhiteCardRepository;
 import io.jochimsen.cahframework.protocol.object.message.request.RestartGameRequest;
@@ -25,17 +30,20 @@ public class LandingPresenterImpl implements LandingPresenter {
     private final SessionKeyRepository sessionKeyRepository;
     private final WhiteCardRepository whiteCardRepository;
     private final BlackCardRepository blackCardRepository;
+    private final PlayerRepository playerRepository;
     private final MyApp myApp;
     private final CompositeDisposable compositeDisposable;
 
     private static final String TAG = "LandingPresenterImpl";
 
     @Inject
-    public LandingPresenterImpl(final LandingView landingView, final SessionKeyRepository sessionKeyRepository, final WhiteCardRepository whiteCardRepository, final BlackCardRepository blackCardRepository, final MyApp myApp) {
+    public LandingPresenterImpl(final LandingView landingView, final SessionKeyRepository sessionKeyRepository, final WhiteCardRepository whiteCardRepository,
+                                final BlackCardRepository blackCardRepository, final PlayerRepository playerRepository, final MyApp myApp) {
         this.landingView = landingView;
         this.sessionKeyRepository = sessionKeyRepository;
         this.whiteCardRepository = whiteCardRepository;
         this.blackCardRepository = blackCardRepository;
+        this.playerRepository = playerRepository;
         this.myApp = myApp;
         this.compositeDisposable = new CompositeDisposable();
     }
@@ -94,6 +102,11 @@ public class LandingPresenterImpl implements LandingPresenter {
         sessionKey.setSessionKey(startGameResponse.sessionId);
         sessionKeyRepository.saveSessionKey(sessionKey);
 
+        final List<PlayerModel> playerModels = startGameResponse.player.stream()
+                .map(playerModel -> new PlayerModel(playerModel.playerId, playerModel.nickName))
+                .collect(Collectors.toList());
+
+        playerRepository.setPlayers(playerModels);
         landingView.startGameActivity();
     }
 

@@ -20,6 +20,9 @@ public interface WhiteCardDao {
     @Query("SELECT * FROM WhiteCard")
     Single<List<WhiteCard>> get();
 
+    @Query("SELECT * FROM WhiteCard WHERE whiteCardId = :whiteCardId")
+    Single<WhiteCard> get(final long whiteCardId);
+
     @Query("SELECT * FROM WhiteCardsHash LIMIT 1")
     Maybe<WhiteCardsHash> getHash();
 
