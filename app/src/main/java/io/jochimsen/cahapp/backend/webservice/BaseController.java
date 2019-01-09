@@ -9,7 +9,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public abstract class BaseController {
-    private static final String BASE_URL = "http://192.168.0.143:8080/";
+    private static final String BASE_URL = "https://api.cah.jochimsen.io/";
 
     private final String namespace;
 

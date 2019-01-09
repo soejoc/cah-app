@@ -9,7 +9,7 @@ import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
 
 public class MyApp extends DaggerApplication {
     private static final String host = "192.168.0.143";
-    private static final int port = 666;
+    private static final int port = 6666;
 
     private Thread networkingThread;
 

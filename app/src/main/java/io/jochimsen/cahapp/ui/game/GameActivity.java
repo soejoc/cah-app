@@ -1,5 +1,6 @@
 package io.jochimsen.cahapp.ui.game;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,9 +19,15 @@ import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
 import io.jochimsen.cahapp.R;
 import io.jochimsen.cahapp.model.PlayerModel;
+import io.jochimsen.cahapp.network.handler.MessageSubject;
 import io.jochimsen.cahapp.repository.AvailableCardsRepository;
+import io.jochimsen.cahapp.repository.MergedCardRepository;
 import io.jochimsen.cahapp.repository.PlayerRepository;
 import io.jochimsen.cahapp.view_model.PlayerViewModel;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.UnicastSubject;
 
 public class GameActivity extends DaggerAppCompatActivity implements GameView {
 
@@ -39,6 +46,16 @@ public class GameActivity extends DaggerAppCompatActivity implements GameView {
     @Inject
     AvailableCardsRepository availableCardsRepository;
 
+    @Inject
+    MergedCardRepository mergedCardRepository;
+
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+
+    PlayFragment playFragment;
+
+    SelectWinnerFragment selectWinnerFragment;
+
+    @SuppressLint("CheckResult")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +82,11 @@ public class GameActivity extends DaggerAppCompatActivity implements GameView {
             }
         });
 
-        showGameFragment();
+        playFragment = new PlayFragment();
+        selectWinnerFragment = new SelectWinnerFragment();
+
+        playFragment.setAvailableCardsRepository(availableCardsRepository);
+        selectWinnerFragment.setMergedCardRepository(mergedCardRepository);
     }
 
     @Override
@@ -81,10 +102,12 @@ public class GameActivity extends DaggerAppCompatActivity implements GameView {
     @Override
     public void showGameFragment() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        final PlayFragment playFragment = new PlayFragment();
-        playFragment.setAvailableCardsRepository(availableCardsRepository);
-
         fragmentManager.beginTransaction().replace(R.id.container, playFragment).commit();
+    }
+
+    public void showSelectWinnerFragment() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, selectWinnerFragment).commit();
     }
 
     @Override
@@ -92,5 +115,26 @@ public class GameActivity extends DaggerAppCompatActivity implements GameView {
         super.onStart();
 
         gamePresenter.onStart();
+
+        compositeDisposable.add(MessageSubject.newRoundResponseSubject
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(newRoundResponse -> {
+                    showGameFragment();
+                }));
+
+        compositeDisposable.add(MessageSubject.selectCardResponseSubject
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(selectCardResponse -> {
+                    showSelectWinnerFragment();
+                }));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        compositeDisposable.clear();
     }
 }

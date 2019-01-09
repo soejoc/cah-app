@@ -20,12 +20,20 @@ import io.jochimsen.cahapp.ui.WaitFragment;
 import io.jochimsen.cahapp.view_model.GameViewModel;
 import io.jochimsen.cahapp.view_model.PlayerViewModel;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.ReplaySubject;
 
 public class PlayFragment extends Fragment {
 
     @BindView(R.id.black_card)
     TextView blackCardTextView;
+
+    WhiteCardsFragment whiteCardsFragment;
+
+    WaitFragment waitFragment;
+
+    final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private AvailableCardsRepository availableCardsRepository;
 
@@ -39,11 +47,14 @@ public class PlayFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_play, container, false);
         ButterKnife.bind(this, view);
 
-        showWhiteCardsFragment();
+        whiteCardsFragment = new WhiteCardsFragment();
+        whiteCardsFragment.setAvailableCardsRepository(availableCardsRepository);
+        waitFragment = new WaitFragment();
+        waitFragment.setMessage(getString(R.string.wait_on_players));
+
         return view;
     }
 
-    @SuppressLint("CheckResult")
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -54,26 +65,37 @@ public class PlayFragment extends Fragment {
         gameViewModel.getBlackCardModelLiveData().observe(this, blackCardModel -> {
             blackCardTextView.setText(blackCardModel.getText());
         });
+    }
 
-        MessageSubject.gameMasterResponseSubject
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        showWhiteCardsFragment();
+
+        compositeDisposable.add(MessageSubject.gameMasterResponseSubject
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(gameMasterResponse -> showWaitFragment());
+                .subscribe(gameMasterResponse -> {
+                    showWaitFragment();
+                    MessageSubject.gameMasterResponseSubject = ReplaySubject.create();
+                }));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        compositeDisposable.clear();
     }
 
     public void showWhiteCardsFragment() {
         final FragmentManager fragmentManager = getChildFragmentManager();
-        final WhiteCardsFragment whiteCardsFragment = new WhiteCardsFragment();
-        whiteCardsFragment.setAvailableCardsRepository(availableCardsRepository);
-
         fragmentManager.beginTransaction().replace(R.id.container, whiteCardsFragment).commit();
     }
 
     public void showWaitFragment() {
         final FragmentManager fragmentManager = getChildFragmentManager();
-        final WaitFragment waitFragment = new WaitFragment();
-        waitFragment.setMessage(getString(R.string.wait_on_players));
-
         fragmentManager.beginTransaction().replace(R.id.container, waitFragment).commit();
     }
 }

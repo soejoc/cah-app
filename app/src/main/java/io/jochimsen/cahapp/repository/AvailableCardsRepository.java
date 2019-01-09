@@ -23,14 +23,18 @@ public class AvailableCardsRepository {
     @SuppressLint("CheckResult")
     @Inject
     public AvailableCardsRepository(final WhiteCardRepository whiteCardRepository, final BlackCardRepository blackCardRepository) {
-        MessageSubject.addCardsResponseSubject
+        MessageSubject.newRoundResponseSubject
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(addCardsResponse -> {
-                    final BlackCardModel blackCardModel = new BlackCardModel(addCardsResponse.blackCardModel.blackCardId, blackCardRepository.get(addCardsResponse.blackCardModel.blackCardId).blockingGet().getText());
-                    final List<WhiteCardModel> whiteCardModels = new ArrayList<>();
+                .subscribe(newRoundResponse -> {
+                    final BlackCardModel blackCardModel = new BlackCardModel(newRoundResponse.blackCardModel.blackCardId, blackCardRepository.get(newRoundResponse.blackCardModel.blackCardId).blockingGet().getText());
+                    List<WhiteCardModel> whiteCardModels = whiteCardModelsLiveData.getValue();
 
-                    for(final io.jochimsen.cahframework.protocol.object.model.WhiteCardModel whiteCardModel : addCardsResponse.whiteCardModels) {
+                    if(whiteCardModels == null) {
+                        whiteCardModels = new ArrayList<>();
+                    }
+
+                    for(final io.jochimsen.cahframework.protocol.object.model.WhiteCardModel whiteCardModel : newRoundResponse.whiteCardModels) {
                         whiteCardModels.add(new WhiteCardModel(whiteCardModel.whiteCardId, whiteCardRepository.get(whiteCardModel.whiteCardId).blockingGet().getText()));
                     }
 

@@ -7,15 +7,17 @@ import io.jochimsen.cahframework.channel_handler.ProcessingHandler;
 import io.jochimsen.cahframework.protocol.object.message.MessageCode;
 import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
 import io.jochimsen.cahframework.protocol.object.message.error.ErrorObject;
-import io.jochimsen.cahframework.protocol.object.message.response.AddCardsResponse;
 import io.jochimsen.cahframework.protocol.object.message.response.FinishedGameResponse;
 import io.jochimsen.cahframework.protocol.object.message.response.GameMasterResponse;
+import io.jochimsen.cahframework.protocol.object.message.response.NewRoundResponse;
 import io.jochimsen.cahframework.protocol.object.message.response.SelectCardResponse;
 import io.jochimsen.cahframework.protocol.object.message.response.StartGameResponse;
 import io.jochimsen.cahframework.protocol.object.message.response.WaitForGameResponse;
 import io.jochimsen.cahframework.session.Session;
 import io.jochimsen.cahframework.util.ProtocolInputStream;
 import io.netty.channel.ChannelHandlerContext;
+import io.reactivex.subjects.ReplaySubject;
+import io.reactivex.subjects.UnicastSubject;
 
 public class MessageHandler extends ProcessingHandler {
 
@@ -76,11 +78,11 @@ public class MessageHandler extends ProcessingHandler {
                 break;
             }
 
-            case MessageCode.ADD_CARDS_RS: {
-                final AddCardsResponse addCardsResponse = new AddCardsResponse();
-                addCardsResponse.fromStream(rawMessage);
+            case MessageCode.NEW_ROUND_RS: {
+                final NewRoundResponse newRoundResponse = new NewRoundResponse();
+                newRoundResponse.fromStream(rawMessage);
 
-                MessageSubject.addCardsResponseSubject.onNext(addCardsResponse);
+                MessageSubject.newRoundResponseSubject.onNext(newRoundResponse);
                 break;
             }
 
