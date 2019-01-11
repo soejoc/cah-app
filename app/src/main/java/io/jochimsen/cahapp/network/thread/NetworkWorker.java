@@ -3,7 +3,7 @@ package io.jochimsen.cahapp.network.thread;
 import android.util.Log;
 
 import io.jochimsen.cahapp.network.handler.MessageHandler;
-import io.jochimsen.cahframework.initializer.SslClientInitializer;
+import io.jochimsen.cahframework.initializer.SslProtocolMessageChannelInitializer;
 import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -40,12 +40,13 @@ public class NetworkWorker implements Runnable {
             b.group(workerGroup);
             b.channel(NioSocketChannel.class);
             b.option(ChannelOption.SO_KEEPALIVE, true);
-            b.handler(new SslClientInitializer(sslCtx, new MessageHandler(initialMessage), host, port));
+            b.handler(new SslProtocolMessageChannelInitializer(sslCtx, new MessageHandler(initialMessage), host, port));
 
             final ChannelFuture f = b.connect(host, port).sync();
 
             f.channel().closeFuture().sync();
         } catch (final Throwable throwable) {
+            //ToDO: Exception handling
             Log.d(TAG, throwable.getMessage());
         }
         finally {

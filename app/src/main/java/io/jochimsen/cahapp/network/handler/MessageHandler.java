@@ -1,18 +1,22 @@
 package io.jochimsen.cahapp.network.handler;
 
+import android.util.Log;
+
 import io.jochimsen.cahapp.network.session.ServerSession;
-import io.jochimsen.cahframework.channel_handler.ProcessingHandler;
+import io.jochimsen.cahframework.handler.inbound.InboundMessageHandlerBase;
 import io.jochimsen.cahframework.protocol.object.message.MessageCode;
 import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
-import io.jochimsen.cahframework.protocol.object.message.error.ErrorObject;
-import io.jochimsen.cahframework.protocol.object.message.response.FinishedGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.StartGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.WaitForGameResponse;
+import io.jochimsen.cahframework.protocol.object.message.error.ErrorMessage;
+import io.jochimsen.cahframework.protocol.object.message.response.finished_game.FinishedGameResponse;
+import io.jochimsen.cahframework.protocol.object.message.response.start_game.StartGameResponse;
+import io.jochimsen.cahframework.protocol.object.message.response.wait_for_game.WaitForGameResponse;
 import io.jochimsen.cahframework.session.Session;
 import io.jochimsen.cahframework.util.ProtocolInputStream;
 import io.netty.channel.ChannelHandlerContext;
 
-public class MessageHandler extends ProcessingHandler {
+public class MessageHandler extends InboundMessageHandlerBase {
+
+    private static final String TAG = "MessageHandler";
 
     private static ServerSession serverSession;
 
@@ -41,39 +45,39 @@ public class MessageHandler extends ProcessingHandler {
     }
 
     @Override
-    protected void handleMessage(final int messageId, final ProtocolInputStream rawMessage, final Session session) {
+    protected void handleMessage(final int messageId, final ProtocolInputStream protocolInputStream, final Session session) {
+        Log.d(TAG, String.format("Received message id %d", messageId));
+
         switch (messageId) {
             case MessageCode.START_GAME_RS: {
-                final StartGameResponse startGameResponse = new StartGameResponse();
-                startGameResponse.fromStream(rawMessage);
+                final StartGameResponse startGameResponse = protocolInputStream.readProtocolObject(StartGameResponse.class);
 
                 MessageSubject.startGameResponseSubject.onNext(startGameResponse);
                 break;
             }
 
             case MessageCode.WAIT_FOR_GAME_RS: {
-                final WaitForGameResponse waitForGameResponse = new WaitForGameResponse();
-                waitForGameResponse.fromStream(rawMessage);
+                final WaitForGameResponse waitForGameResponse = protocolInputStream.readProtocolObject(WaitForGameResponse.class);
 
                 MessageSubject.waitForGameResponseSubject.onNext(waitForGameResponse);
                 break;
             }
 
             case MessageCode.FINISHED_GAME_RS: {
-                final FinishedGameResponse finishedGameResponse = new FinishedGameResponse();
-                finishedGameResponse.fromStream(rawMessage);
+                final FinishedGameResponse finishedGameResponse = protocolInputStream.readProtocolObject(FinishedGameResponse.class);
 
                 MessageSubject.finishedGameResponseSubject.onNext(finishedGameResponse);
                 break;
             }
             default: {
+                Log.i(TAG, String.format("Unknown message received %d", messageId));
                 break;
             }
         }
     }
 
     @Override
-    protected void onErrorReceived(final ErrorObject errorObject, final Session session) {
+    protected void onErrorReceived(final ErrorMessage errorMessage, final Session session) {
 
     }
 

@@ -8,8 +8,8 @@ import io.jochimsen.cahapp.network.thread.NetworkWorker;
 import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
 
 public class MyApp extends DaggerApplication {
-    private static final String host = "192.168.0.143";
-    private static final int port = 666;
+    private static final String host = "172.18.22.49";
+    private static final int port = 8080;
 
     private Thread networkingThread;
 
