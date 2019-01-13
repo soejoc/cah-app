@@ -4,6 +4,7 @@ import android.util.Log;
 
 import io.jochimsen.cahapp.network.session.ServerSession;
 import io.jochimsen.cahframework.handler.inbound.InboundMessageHandlerBase;
+import io.jochimsen.cahframework.protocol.object.ProtocolObject;
 import io.jochimsen.cahframework.protocol.object.message.MessageCode;
 import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
 import io.jochimsen.cahframework.protocol.object.message.error.ErrorMessage;
@@ -50,21 +51,21 @@ public class MessageHandler extends InboundMessageHandlerBase {
 
         switch (messageId) {
             case MessageCode.START_GAME_RS: {
-                final StartGameResponse startGameResponse = protocolInputStream.readProtocolObject(StartGameResponse.class);
+                final StartGameResponse startGameResponse = ProtocolObject.fromProtocolInputStream(StartGameResponse.class, protocolInputStream);
 
                 MessageSubject.startGameResponseSubject.onNext(startGameResponse);
                 break;
             }
 
             case MessageCode.WAIT_FOR_GAME_RS: {
-                final WaitForGameResponse waitForGameResponse = protocolInputStream.readProtocolObject(WaitForGameResponse.class);
+                final WaitForGameResponse waitForGameResponse = ProtocolObject.fromProtocolInputStream(WaitForGameResponse.class, protocolInputStream);
 
                 MessageSubject.waitForGameResponseSubject.onNext(waitForGameResponse);
                 break;
             }
 
             case MessageCode.FINISHED_GAME_RS: {
-                final FinishedGameResponse finishedGameResponse = protocolInputStream.readProtocolObject(FinishedGameResponse.class);
+                final FinishedGameResponse finishedGameResponse = ProtocolObject.fromProtocolInputStream(FinishedGameResponse.class, protocolInputStream);
 
                 MessageSubject.finishedGameResponseSubject.onNext(finishedGameResponse);
                 break;
