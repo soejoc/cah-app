@@ -13,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.R;
-import io.jochimsen.cahframework.protocol.object.message.request.start_game.StartGameRequest;
+import io.jochimsen.cahframework.protocol.object.message.request.StartGameRequest;
 
 public class StartGameFragment extends Fragment {
 
