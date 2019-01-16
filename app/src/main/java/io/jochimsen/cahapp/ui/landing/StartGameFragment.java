@@ -39,8 +39,7 @@ public class StartGameFragment extends Fragment {
             final MyApp myApp = (MyApp)activity.getApplication();
 
             final String nickName = nicknameEdit.getText().toString();
-            final StartGameRequest startGameRequest = new StartGameRequest();
-            startGameRequest.nickName = nickName;
+            final StartGameRequest startGameRequest = new StartGameRequest(nickName);
 
             if(myApp.getNetworkingThread() == null) {
                 myApp.createConnection(startGameRequest);

@@ -50,21 +50,21 @@ public class MessageHandler extends InboundMessageHandlerBase {
 
         switch (messageId) {
             case MessageCode.START_GAME_RS: {
-                final StartGameResponse startGameResponse = protocolInputStream.readObject(StartGameResponse.class);
+                final StartGameResponse startGameResponse = protocolInputStream.readObject();
 
                 MessageSubject.startGameResponseSubject.onNext(startGameResponse);
                 break;
             }
 
             case MessageCode.WAIT_FOR_GAME_RS: {
-                final WaitForGameResponse waitForGameResponse = protocolInputStream.readObject(WaitForGameResponse.class);
+                final WaitForGameResponse waitForGameResponse = protocolInputStream.readObject();
 
                 MessageSubject.waitForGameResponseSubject.onNext(waitForGameResponse);
                 break;
             }
 
             case MessageCode.FINISHED_GAME_RS: {
-                final FinishedGameResponse finishedGameResponse = protocolInputStream.readObject(FinishedGameResponse.class);
+                final FinishedGameResponse finishedGameResponse = protocolInputStream.readObject();
 
                 MessageSubject.finishedGameResponseSubject.onNext(finishedGameResponse);
                 break;

@@ -91,7 +91,7 @@ public class LandingPresenterImpl implements LandingPresenter {
 
     private void onStartGame(final StartGameResponse startGameResponse) {
         final SessionKey sessionKey = new SessionKey();
-        sessionKey.setSessionKey(startGameResponse.sessionId);
+        sessionKey.setSessionKey(startGameResponse.getSessionId());
         sessionKeyRepository.saveSessionKey(sessionKey);
 
         landingView.startGameActivity();
@@ -104,8 +104,7 @@ public class LandingPresenterImpl implements LandingPresenter {
 
     private void onFetchedSessionKey(final SessionKey sessionKey) {
         if (sessionKey.getSessionKey() != null) {
-            final RestartGameRequest restartGameRequest = new RestartGameRequest();
-            restartGameRequest.sessionKey = sessionKey.getSessionKey();
+            final RestartGameRequest restartGameRequest = new RestartGameRequest(sessionKey.getSessionKey());
 
             myApp.createConnection(restartGameRequest);
         } else {
