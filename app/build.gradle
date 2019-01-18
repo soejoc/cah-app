@@ -33,9 +33,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    def netty_version = "4.1.24.Final"
-    implementation "io.netty:netty-all:$netty_version"
-    implementation files('../../cah-framework/build/libs/cah-framework.jar')
+    implementation project(path: ":cah-framework")
 
     def butterknife_version = "8.8.1"
     implementation "com.jakewharton:butterknife:$butterknife_version"

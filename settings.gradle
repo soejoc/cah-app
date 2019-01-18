@@ -1,1 +1,4 @@
 include ':app'
+
+include ':cah-framework'
+project(':cah-framework').projectDir = new File('../cah-framework')
