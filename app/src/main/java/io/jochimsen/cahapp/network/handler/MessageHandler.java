@@ -4,13 +4,12 @@ import android.util.Log;
 
 import io.jochimsen.cahapp.network.session.ServerSession;
 import io.jochimsen.cahframework.handler.inbound.InboundMessageHandlerBase;
-import io.jochimsen.cahframework.protocol.object.ProtocolObject;
 import io.jochimsen.cahframework.protocol.object.message.MessageCode;
 import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
 import io.jochimsen.cahframework.protocol.object.message.error.ErrorMessage;
-import io.jochimsen.cahframework.protocol.object.message.response.finished_game.FinishedGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.start_game.StartGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.wait_for_game.WaitForGameResponse;
+import io.jochimsen.cahframework.protocol.object.message.response.FinishedGameResponse;
+import io.jochimsen.cahframework.protocol.object.message.response.StartGameResponse;
+import io.jochimsen.cahframework.protocol.object.message.response.WaitForGameResponse;
 import io.jochimsen.cahframework.session.Session;
 import io.jochimsen.cahframework.util.ProtocolInputStream;
 import io.netty.channel.ChannelHandlerContext;
@@ -46,26 +45,26 @@ public class MessageHandler extends InboundMessageHandlerBase {
     }
 
     @Override
-    protected void handleMessage(final int messageId, final ProtocolInputStream protocolInputStream, final Session session) {
+    protected void handleMessage(final int messageId, final ProtocolInputStream protocolInputStream, final Session session) throws Exception {
         Log.d(TAG, String.format("Received message id %d", messageId));
 
         switch (messageId) {
             case MessageCode.START_GAME_RS: {
-                final StartGameResponse startGameResponse = ProtocolObject.fromProtocolInputStream(StartGameResponse.class, protocolInputStream);
+                final StartGameResponse startGameResponse = protocolInputStream.readObject();
 
                 MessageSubject.startGameResponseSubject.onNext(startGameResponse);
                 break;
             }
 
             case MessageCode.WAIT_FOR_GAME_RS: {
-                final WaitForGameResponse waitForGameResponse = ProtocolObject.fromProtocolInputStream(WaitForGameResponse.class, protocolInputStream);
+                final WaitForGameResponse waitForGameResponse = protocolInputStream.readObject();
 
                 MessageSubject.waitForGameResponseSubject.onNext(waitForGameResponse);
                 break;
             }
 
             case MessageCode.FINISHED_GAME_RS: {
-                final FinishedGameResponse finishedGameResponse = ProtocolObject.fromProtocolInputStream(FinishedGameResponse.class, protocolInputStream);
+                final FinishedGameResponse finishedGameResponse = protocolInputStream.readObject();
 
                 MessageSubject.finishedGameResponseSubject.onNext(finishedGameResponse);
                 break;
@@ -89,5 +88,10 @@ public class MessageHandler extends InboundMessageHandlerBase {
         if(session == serverSession) {
             serverSession = null;
         }
+    }
+
+    @Override
+    protected void onUncaughtException(final Session session, final Throwable throwable) {
+
     }
 }

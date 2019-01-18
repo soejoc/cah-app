@@ -13,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.R;
-import io.jochimsen.cahframework.protocol.object.message.request.start_game.StartGameRequest;
+import io.jochimsen.cahframework.protocol.object.message.request.StartGameRequest;
 
 public class StartGameFragment extends Fragment {
 
@@ -39,8 +39,7 @@ public class StartGameFragment extends Fragment {
             final MyApp myApp = (MyApp)activity.getApplication();
 
             final String nickName = nicknameEdit.getText().toString();
-            final StartGameRequest startGameRequest = new StartGameRequest();
-            startGameRequest.nickName = nickName;
+            final StartGameRequest startGameRequest = new StartGameRequest(nickName);
 
             if(myApp.getNetworkingThread() == null) {
                 myApp.createConnection(startGameRequest);

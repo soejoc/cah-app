@@ -11,10 +11,10 @@ import io.jochimsen.cahapp.network.handler.MessageSubject;
 import io.jochimsen.cahapp.repository.BlackCardRepository;
 import io.jochimsen.cahapp.repository.SessionKeyRepository;
 import io.jochimsen.cahapp.repository.WhiteCardRepository;
-import io.jochimsen.cahframework.protocol.object.message.request.restart_game.RestartGameRequest;
-import io.jochimsen.cahframework.protocol.object.message.response.finished_game.FinishedGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.start_game.StartGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.wait_for_game.WaitForGameResponse;
+import io.jochimsen.cahframework.protocol.object.message.request.RestartGameRequest;
+import io.jochimsen.cahframework.protocol.object.message.response.FinishedGameResponse;
+import io.jochimsen.cahframework.protocol.object.message.response.StartGameResponse;
+import io.jochimsen.cahframework.protocol.object.message.response.WaitForGameResponse;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -91,7 +91,7 @@ public class LandingPresenterImpl implements LandingPresenter {
 
     private void onStartGame(final StartGameResponse startGameResponse) {
         final SessionKey sessionKey = new SessionKey();
-        sessionKey.setSessionKey(startGameResponse.sessionId);
+        sessionKey.setSessionKey(startGameResponse.getSessionId());
         sessionKeyRepository.saveSessionKey(sessionKey);
 
         landingView.startGameActivity();
@@ -104,8 +104,7 @@ public class LandingPresenterImpl implements LandingPresenter {
 
     private void onFetchedSessionKey(final SessionKey sessionKey) {
         if (sessionKey.getSessionKey() != null) {
-            final RestartGameRequest restartGameRequest = new RestartGameRequest();
-            restartGameRequest.sessionKey = sessionKey.getSessionKey();
+            final RestartGameRequest restartGameRequest = new RestartGameRequest(sessionKey.getSessionKey());
 
             myApp.createConnection(restartGameRequest);
         } else {
