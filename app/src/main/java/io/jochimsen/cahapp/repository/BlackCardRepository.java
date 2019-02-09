@@ -15,13 +15,14 @@ import io.jochimsen.cahapp.backend.webservice.black_card.BlackCardController;
 import io.jochimsen.cahapp.backend.webservice.black_card.response.BlackCardResponse;
 import io.jochimsen.cahapp.backend.webservice.global.response.CheckHashResponse;
 import io.jochimsen.cahapp.backend.webservice.global.response.HashResponse;
+import io.jochimsen.cahapp.di.scope.AppScope;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
-@Singleton
+@AppScope
 public class BlackCardRepository {
     private final BlackCardDao blackCardDao;
     private final BlackCardController blackCardController;

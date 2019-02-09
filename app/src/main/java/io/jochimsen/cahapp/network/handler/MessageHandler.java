@@ -2,6 +2,15 @@ package io.jochimsen.cahapp.network.handler;
 
 import android.util.Log;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import io.jochimsen.cahapp.di.component.NetworkComponent;
+import io.jochimsen.cahapp.di.component.SessionComponent;
+import io.jochimsen.cahapp.di.module.SessionModule;
+import io.jochimsen.cahapp.di.scope.AppScope;
+import io.jochimsen.cahapp.di.scope.NetworkScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
 import io.jochimsen.cahframework.handler.inbound.InboundMessageHandlerBase;
 import io.jochimsen.cahframework.protocol.object.message.MessageCode;
@@ -13,26 +22,40 @@ import io.jochimsen.cahframework.protocol.object.message.response.WaitForGameRes
 import io.jochimsen.cahframework.session.Session;
 import io.jochimsen.cahframework.util.ProtocolInputStream;
 import io.netty.channel.ChannelHandlerContext;
+import io.reactivex.subjects.Subject;
 
+@NetworkScope
 public class MessageHandler extends InboundMessageHandlerBase {
 
     private static final String TAG = "MessageHandler";
 
-    private static ServerSession serverSession;
-
-    public static ServerSession getServerSession() {
-        return serverSession;
-    }
-
     private final ProtocolMessage initialMessage;
+    private final Subject<StartGameResponse> startGameSubject;
+    private final Subject<WaitForGameResponse> waitForGameSubject;
+    private final Subject<FinishedGameResponse> finishGameSubject;
+    private final NetworkComponent networkComponent;
+    private SessionComponent sessionComponent;
+    private ServerSession serverSession;
 
-    public MessageHandler(final ProtocolMessage initialMessage) {
+    @Inject
+    public MessageHandler(
+            @Named("initial_message") final ProtocolMessage initialMessage,
+            final Subject<StartGameResponse> startGameSubject,
+            final Subject<WaitForGameResponse> waitForGameSubject,
+            final Subject<FinishedGameResponse> finishGameSubject,
+            final NetworkComponent networkComponent
+    ) {
         this.initialMessage = initialMessage;
+        this.startGameSubject = startGameSubject;
+        this.waitForGameSubject = waitForGameSubject;
+        this.finishGameSubject = finishGameSubject;
+        this.networkComponent = networkComponent;
     }
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
         serverSession = new ServerSession(ctx);
+        sessionComponent = networkComponent.sessionComponent(new SessionModule(serverSession));
 
         if(initialMessage != null) {
             serverSession.say(initialMessage);
@@ -52,21 +75,21 @@ public class MessageHandler extends InboundMessageHandlerBase {
             case MessageCode.START_GAME_RS: {
                 final StartGameResponse startGameResponse = protocolInputStream.readObject();
 
-                MessageSubject.startGameResponseSubject.onNext(startGameResponse);
+                startGameSubject.onNext(startGameResponse);
                 break;
             }
 
             case MessageCode.WAIT_FOR_GAME_RS: {
                 final WaitForGameResponse waitForGameResponse = protocolInputStream.readObject();
 
-                MessageSubject.waitForGameResponseSubject.onNext(waitForGameResponse);
+                waitForGameSubject.onNext(waitForGameResponse);
                 break;
             }
 
             case MessageCode.FINISHED_GAME_RS: {
                 final FinishedGameResponse finishedGameResponse = protocolInputStream.readObject();
 
-                MessageSubject.finishedGameResponseSubject.onNext(finishedGameResponse);
+                finishGameSubject.onNext(finishedGameResponse);
                 break;
             }
             default: {
@@ -87,6 +110,7 @@ public class MessageHandler extends InboundMessageHandlerBase {
 
         if(session == serverSession) {
             serverSession = null;
+            sessionComponent = null;
         }
     }
 

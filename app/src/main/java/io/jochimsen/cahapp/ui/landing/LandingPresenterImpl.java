@@ -3,11 +3,13 @@ package io.jochimsen.cahapp.ui.landing;
 import android.util.Log;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.R;
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKey;
-import io.jochimsen.cahapp.network.handler.MessageSubject;
+import io.jochimsen.cahapp.di.scope.AppScope;
+import io.jochimsen.cahapp.di.scope.LandingActivityScope;
 import io.jochimsen.cahapp.repository.BlackCardRepository;
 import io.jochimsen.cahapp.repository.SessionKeyRepository;
 import io.jochimsen.cahapp.repository.WhiteCardRepository;
@@ -19,44 +21,61 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.Subject;
 
+@LandingActivityScope
 public class LandingPresenterImpl implements LandingPresenter {
     private final LandingView landingView;
     private final SessionKeyRepository sessionKeyRepository;
     private final WhiteCardRepository whiteCardRepository;
     private final BlackCardRepository blackCardRepository;
+    private final Subject<WaitForGameResponse> waitForGameSubject;
+    private final Subject<StartGameResponse> startGameSubject;
+    private final Subject<FinishedGameResponse> finishGameSubject;
     private final MyApp myApp;
     private final CompositeDisposable compositeDisposable;
 
     private static final String TAG = "LandingPresenterImpl";
 
     @Inject
-    public LandingPresenterImpl(final LandingView landingView, final SessionKeyRepository sessionKeyRepository, final WhiteCardRepository whiteCardRepository, final BlackCardRepository blackCardRepository, final MyApp myApp) {
+    public LandingPresenterImpl(
+            final LandingView landingView,
+            final SessionKeyRepository sessionKeyRepository,
+            final WhiteCardRepository whiteCardRepository,
+            final BlackCardRepository blackCardRepository,
+            final Subject<WaitForGameResponse> waitForGameSubject,
+            final Subject<StartGameResponse> startGameSubject,
+            final Subject<FinishedGameResponse> finishGameSubject,
+            final MyApp myApp
+    ) {
         this.landingView = landingView;
         this.sessionKeyRepository = sessionKeyRepository;
         this.whiteCardRepository = whiteCardRepository;
         this.blackCardRepository = blackCardRepository;
+        this.waitForGameSubject = waitForGameSubject;
+        this.startGameSubject = startGameSubject;
+        this.finishGameSubject = finishGameSubject;
         this.myApp = myApp;
         this.compositeDisposable = new CompositeDisposable();
     }
 
     @Override
     public void onStart() {
-        final Disposable waitForGameDisposable = MessageSubject.waitForGameResponseSubject
+        final Disposable waitForGameDisposable = waitForGameSubject
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onWaitForGame, LandingPresenterImpl::onError);
 
         addDisposable(waitForGameDisposable);
 
-        final Disposable startGameDisposable = MessageSubject.startGameResponseSubject
+        final Disposable startGameDisposable = startGameSubject
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onStartGame, LandingPresenterImpl::onError);
 
         addDisposable(startGameDisposable);
 
-        final Disposable finishedGameDisposable = MessageSubject.finishedGameResponseSubject
+        final Disposable finishedGameDisposable = finishGameSubject
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onFinishedGame, LandingPresenterImpl::onError);

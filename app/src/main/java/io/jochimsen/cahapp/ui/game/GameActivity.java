@@ -14,10 +14,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
 import io.jochimsen.cahapp.R;
+import io.jochimsen.cahapp.di.scope.GameActivityScope;
+import io.jochimsen.cahapp.network.session.ServerSession;
 
+@GameActivityScope
 public class GameActivity extends DaggerAppCompatActivity implements GameView {
-    private static final String ANTAGONISTS_KEY = "antagonists";
-    private static final String ME_KEY = "me";
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
@@ -27,6 +28,9 @@ public class GameActivity extends DaggerAppCompatActivity implements GameView {
 
     @Inject
     GamePresenter gamePresenter;
+
+    @Inject
+    ServerSession serverSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

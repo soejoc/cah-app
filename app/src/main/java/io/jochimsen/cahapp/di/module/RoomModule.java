@@ -11,29 +11,30 @@ import io.jochimsen.cahapp.backend.local.CahDatabase;
 import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCardDao;
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKeyDao;
 import io.jochimsen.cahapp.backend.local.entity.white_card.WhiteCardDao;
+import io.jochimsen.cahapp.di.scope.AppScope;
 
 @Module
 public class RoomModule {
 
-    @Singleton
+    @AppScope
     @Provides
-    CahDatabase provideDatabase(final Application application) {
+    static CahDatabase provideDatabase(final Application application) {
         return Room.databaseBuilder(application, CahDatabase.class, "cah-db").build();
     }
 
-    @Singleton
+    @AppScope
     @Provides
-    SessionKeyDao provideSessionKeyDao(final CahDatabase database) {
+    static SessionKeyDao provideSessionKeyDao(final CahDatabase database) {
         return database.sessionKeyDao();
     }
 
-    @Singleton
+    @AppScope
     @Provides
-    WhiteCardDao provideWhiteCardDao(final CahDatabase database) {
+    static WhiteCardDao provideWhiteCardDao(final CahDatabase database) {
         return database.whiteCardDao();
     }
 
-    @Singleton
+    @AppScope
     @Provides
-    BlackCardDao provideBlackCardDao(final CahDatabase database) { return  database.blackCardDao(); }
+    static BlackCardDao provideBlackCardDao(final CahDatabase database) { return  database.blackCardDao(); }
 }

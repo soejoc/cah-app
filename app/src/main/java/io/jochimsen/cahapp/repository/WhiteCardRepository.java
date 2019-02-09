@@ -15,13 +15,14 @@ import io.jochimsen.cahapp.backend.webservice.global.response.CheckHashResponse;
 import io.jochimsen.cahapp.backend.webservice.global.response.HashResponse;
 import io.jochimsen.cahapp.backend.webservice.white_card.WhiteCardController;
 import io.jochimsen.cahapp.backend.webservice.white_card.response.WhiteCardResponse;
+import io.jochimsen.cahapp.di.scope.AppScope;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
-@Singleton
+@AppScope
 public class WhiteCardRepository {
     private final WhiteCardDao whiteCardDao;
     private final WhiteCardController whiteCardController;

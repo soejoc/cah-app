@@ -1,27 +1,33 @@
 package io.jochimsen.cahapp.ui.landing;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.DaggerFragment;
 import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.R;
+import io.jochimsen.cahapp.di.scope.StartGameFragmentScope;
 import io.jochimsen.cahframework.protocol.object.message.request.StartGameRequest;
 
-public class StartGameFragment extends Fragment {
+@StartGameFragmentScope
+public class StartGameFragment extends DaggerFragment {
 
     @BindView(R.id.nicknameEdit)
     EditText nicknameEdit;
 
     @BindView(R.id.playButton)
     Button playButton;
+
+    @Inject
+    MyApp myApp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,24 +36,11 @@ public class StartGameFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         playButton.setOnClickListener(v -> {
-            final Activity activity = getActivity();
-
-            if(activity == null) {
-                return;
-            }
-
-            final MyApp myApp = (MyApp)activity.getApplication();
-
             final String nickName = nicknameEdit.getText().toString();
             final StartGameRequest startGameRequest = new StartGameRequest(nickName);
 
-            if(myApp.getNetworkingThread() == null) {
-                myApp.createConnection(startGameRequest);
-            } else {
-                //request(startGameRequest);
-            }
-        }
-        );
+            myApp.createConnection(startGameRequest);
+        });
 
         return view;
     }

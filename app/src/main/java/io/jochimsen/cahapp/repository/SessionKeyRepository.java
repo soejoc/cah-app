@@ -5,11 +5,12 @@ import javax.inject.Singleton;
 
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKey;
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKeyDao;
+import io.jochimsen.cahapp.di.scope.AppScope;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.schedulers.Schedulers;
 
-@Singleton
+@AppScope
 public class SessionKeyRepository {
     private final SessionKeyDao sessionKeyDao;
 

@@ -8,8 +8,10 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import io.jochimsen.cahapp.R;
+import io.jochimsen.cahapp.di.scope.LandingActivityScope;
 import io.jochimsen.cahapp.ui.game.GameActivity;
 
+@LandingActivityScope
 public class LandingActivity extends DaggerAppCompatActivity implements LandingView {
 
     @Inject

@@ -2,15 +2,13 @@ package io.jochimsen.cahapp.di.module;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import io.jochimsen.cahapp.di.scope.GameActivityScope;
 import io.jochimsen.cahapp.ui.game.GameActivity;
-import io.jochimsen.cahapp.ui.landing.LandingActivity;
 
 @Module
-public abstract class ActivityBuilder {
+public abstract class SessionActivityModule {
 
-    @ContributesAndroidInjector(modules = LandingActivityModule.class)
-    abstract LandingActivity bindLandingActivity();
-
+    @GameActivityScope
     @ContributesAndroidInjector(modules = GameActivityModule.class)
     abstract GameActivity bindGameActivity();
 }
