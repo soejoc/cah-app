@@ -1,4 +1,4 @@
-package io.jochimsen.cahapp.repository;
+package io.jochimsen.cahapp.backend;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

@@ -5,9 +5,9 @@ import dagger.Component;
 import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 import io.jochimsen.cahapp.MyApp;
+import io.jochimsen.cahapp.di.module.ApiModule;
 import io.jochimsen.cahapp.di.module.AppActivityModule;
 import io.jochimsen.cahapp.di.module.AppModule;
-import io.jochimsen.cahapp.di.module.ConnectionModule;
 import io.jochimsen.cahapp.di.module.MessageSubjectModule;
 import io.jochimsen.cahapp.di.module.RoomModule;
 import io.jochimsen.cahapp.di.scope.AppScope;
@@ -18,7 +18,8 @@ import io.jochimsen.cahapp.di.scope.AppScope;
         AppModule.class,
         AppActivityModule.class,
         RoomModule.class,
-        MessageSubjectModule.class
+        MessageSubjectModule.class,
+        ApiModule.class
 })
 public interface AppComponent extends AndroidInjector<MyApp> {
     @Component.Builder
@@ -31,5 +32,5 @@ public interface AppComponent extends AndroidInjector<MyApp> {
     @Override
     void inject(final MyApp instance);
 
-    NetworkComponent networkComponent(final ConnectionModule connectionModule);
+    NetworkComponent.Builder networkComponentBuilder();
 }

@@ -18,9 +18,7 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
-@Module(includes = {
-        ConnectionModule.class
-})
+@Module
 public class NettyModule {
     private static final String TAG = "NettyModule";
 

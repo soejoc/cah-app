@@ -10,7 +10,7 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 @Module
-public class MessageSubjectModule {
+public abstract class MessageSubjectModule {
 
     @AppScope
     @Provides

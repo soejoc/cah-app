@@ -6,16 +6,6 @@ import io.jochimsen.cahapp.di.scope.SessionScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
 
 @Module
-public class SessionModule {
-    final private ServerSession serverSession;
+public abstract class SessionModule {
 
-    public SessionModule(ServerSession serverSession) {
-        this.serverSession = serverSession;
-    }
-
-    @SessionScope
-    @Provides
-    public ServerSession provideServerSession() {
-        return serverSession;
-    }
 }

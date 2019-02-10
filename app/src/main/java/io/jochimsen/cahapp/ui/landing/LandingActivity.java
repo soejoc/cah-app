@@ -17,6 +17,12 @@ public class LandingActivity extends DaggerAppCompatActivity implements LandingV
     @Inject
     LandingPresenter landingPresenter;
 
+    @Inject
+    StartGameFragment startGameFragment;
+
+    @Inject
+    WaitFragment waitFragment;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,14 +48,12 @@ public class LandingActivity extends DaggerAppCompatActivity implements LandingV
     @Override
     public void showStartGameFragment() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        final StartGameFragment startGameFragment = new StartGameFragment();
         fragmentManager.beginTransaction().replace(R.id.container, startGameFragment).commit();
     }
 
     @Override
     public void showWaitFragment(final int resId) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        final WaitFragment waitFragment = new WaitFragment();
 
         if(resId != 0) {
             waitFragment.setMessage(getString(resId));

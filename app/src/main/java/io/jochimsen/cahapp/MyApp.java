@@ -1,5 +1,6 @@
 package io.jochimsen.cahapp;
 
+import android.content.Context;
 import android.util.Log;
 
 import dagger.android.AndroidInjector;
@@ -7,8 +8,10 @@ import dagger.android.DaggerApplication;
 import io.jochimsen.cahapp.di.component.AppComponent;
 import io.jochimsen.cahapp.di.component.DaggerAppComponent;
 import io.jochimsen.cahapp.di.component.NetworkComponent;
+import io.jochimsen.cahapp.di.component.SessionComponent;
 import io.jochimsen.cahapp.di.module.ConnectionModule;
 import io.jochimsen.cahapp.di.scope.AppScope;
+import io.jochimsen.cahapp.network.session.ServerSession;
 import io.jochimsen.cahapp.network.thread.NetworkWorker;
 import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
 import io.reactivex.Completable;
@@ -21,11 +24,18 @@ public class MyApp extends DaggerApplication {
 
     private AppComponent appComponent;
     private NetworkComponent networkComponent;
+    private SessionComponent sessionComponent;
     private Disposable networkDisposable;
+
+    public static MyApp get(final Context context) {
+        return (MyApp)context.getApplicationContext();
+    }
 
     public void createConnection(final ProtocolMessage initialMessage) {
         networkComponent = appComponent
-                .networkComponent(new ConnectionModule(initialMessage));
+                .networkComponentBuilder()
+                .initialMessage(initialMessage)
+                .build();
 
         final NetworkWorker networkWorker = networkComponent.networkWorker();
 
@@ -42,9 +52,30 @@ public class MyApp extends DaggerApplication {
         Log.e(TAG, throwable.getMessage());
     }
 
+    public void createSessionComponent(final ServerSession serverSession) {
+        if(sessionComponent == null) {
+            sessionComponent = networkComponent
+                    .sessionComponentBuilder()
+                    .serverSession(serverSession)
+                    .build();
+        }
+    }
+
+    public void releaseSessionComponent() {
+        sessionComponent = null;
+    }
+
+    public SessionComponent getSessionComponent() {
+        return sessionComponent;
+    }
+
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        appComponent = DaggerAppComponent.builder().application(this).build();
+        appComponent = DaggerAppComponent
+                .builder()
+                .application(this)
+                .build();
+
         return appComponent;
     }
 

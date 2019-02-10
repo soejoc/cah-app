@@ -14,7 +14,7 @@ import io.jochimsen.cahapp.backend.local.entity.white_card.WhiteCardDao;
 import io.jochimsen.cahapp.di.scope.AppScope;
 
 @Module
-public class RoomModule {
+public abstract class RoomModule {
 
     @AppScope
     @Provides

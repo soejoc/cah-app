@@ -5,6 +5,8 @@ import android.util.Log;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.jochimsen.cahapp.di.qualifier.GameserverHost;
+import io.jochimsen.cahapp.di.qualifier.GameserverPort;
 import io.jochimsen.cahapp.di.scope.NetworkScope;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -18,7 +20,7 @@ public class NetworkWorker implements Runnable {
     private static final String TAG = "NetworkWorker";
 
     @Inject
-    public NetworkWorker(@Named("host") final String host, @Named("port") final int port, final Bootstrap bootstrap) {
+    public NetworkWorker(@GameserverHost final String host, @GameserverPort final int port, final Bootstrap bootstrap) {
         this.host = host;
         this.port = port;
         this.bootstrap = bootstrap;
@@ -29,7 +31,7 @@ public class NetworkWorker implements Runnable {
         try {
             final ChannelFuture f = bootstrap.connect(host, port).sync();
             f.channel().closeFuture().sync();
-        } catch (final Throwable throwable) {
+        } catch (final InterruptedException throwable) {
             //ToDO: Exception handling
             Log.d(TAG, throwable.getMessage());
         }

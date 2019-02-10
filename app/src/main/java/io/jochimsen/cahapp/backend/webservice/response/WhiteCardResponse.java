@@ -1,4 +1,4 @@
-package io.jochimsen.cahapp.backend.webservice.white_card.response;
+package io.jochimsen.cahapp.backend.webservice.response;
 
 public class WhiteCardResponse {
     public long whiteCardId;

@@ -4,12 +4,9 @@ import android.util.Log;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
-import io.jochimsen.cahapp.di.component.NetworkComponent;
-import io.jochimsen.cahapp.di.component.SessionComponent;
-import io.jochimsen.cahapp.di.module.SessionModule;
-import io.jochimsen.cahapp.di.scope.AppScope;
+import io.jochimsen.cahapp.MyApp;
+import io.jochimsen.cahapp.di.qualifier.InitialMessage;
 import io.jochimsen.cahapp.di.scope.NetworkScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
 import io.jochimsen.cahframework.handler.inbound.InboundMessageHandlerBase;
@@ -33,29 +30,28 @@ public class MessageHandler extends InboundMessageHandlerBase {
     private final Subject<StartGameResponse> startGameSubject;
     private final Subject<WaitForGameResponse> waitForGameSubject;
     private final Subject<FinishedGameResponse> finishGameSubject;
-    private final NetworkComponent networkComponent;
-    private SessionComponent sessionComponent;
+    private MyApp myApp;
     private ServerSession serverSession;
 
     @Inject
     public MessageHandler(
-            @Named("initial_message") final ProtocolMessage initialMessage,
+            @InitialMessage final ProtocolMessage initialMessage,
             final Subject<StartGameResponse> startGameSubject,
             final Subject<WaitForGameResponse> waitForGameSubject,
             final Subject<FinishedGameResponse> finishGameSubject,
-            final NetworkComponent networkComponent
+            final MyApp myApp
     ) {
         this.initialMessage = initialMessage;
         this.startGameSubject = startGameSubject;
         this.waitForGameSubject = waitForGameSubject;
         this.finishGameSubject = finishGameSubject;
-        this.networkComponent = networkComponent;
+        this.myApp = myApp;
     }
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
         serverSession = new ServerSession(ctx);
-        sessionComponent = networkComponent.sessionComponent(new SessionModule(serverSession));
+        myApp.createSessionComponent(serverSession);
 
         if(initialMessage != null) {
             serverSession.say(initialMessage);
@@ -110,7 +106,7 @@ public class MessageHandler extends InboundMessageHandlerBase {
 
         if(session == serverSession) {
             serverSession = null;
-            sessionComponent = null;
+            myApp.releaseSessionComponent();
         }
     }
 

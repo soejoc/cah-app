@@ -4,32 +4,21 @@ import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
+import io.jochimsen.cahapp.di.qualifier.GameserverHost;
+import io.jochimsen.cahapp.di.qualifier.GameserverPort;
 import io.jochimsen.cahapp.di.scope.NetworkScope;
-import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
 
 @Module
-public class ConnectionModule {
-    private final ProtocolMessage initialMessage;
+public abstract class ConnectionModule {
 
-    public ConnectionModule(ProtocolMessage initialMessage) {
-        this.initialMessage = initialMessage;
-    }
-
-    @Named("initial_message")
-    @NetworkScope
-    @Provides
-    public ProtocolMessage provideInitialMessage() {
-        return initialMessage;
-    }
-
-    @Named("port")
+    @GameserverPort
     @NetworkScope
     @Provides
     static public int providePort() {
         return 666;
     }
 
-    @Named("host")
+    @GameserverHost
     @NetworkScope
     @Provides
     static public String provideHost() {

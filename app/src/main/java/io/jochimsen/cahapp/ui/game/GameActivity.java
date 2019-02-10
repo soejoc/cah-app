@@ -5,6 +5,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -12,13 +13,13 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.support.DaggerAppCompatActivity;
+import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.R;
 import io.jochimsen.cahapp.di.scope.GameActivityScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
 
 @GameActivityScope
-public class GameActivity extends DaggerAppCompatActivity implements GameView {
+public class GameActivity extends AppCompatActivity implements GameView {
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
@@ -34,6 +35,13 @@ public class GameActivity extends DaggerAppCompatActivity implements GameView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MyApp.get(this)
+                .getSessionComponent()
+                .gameActivityComponentBuilder()
+                .gameActivity(this)
+                .build()
+                .inject(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
