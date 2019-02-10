@@ -1,6 +1,9 @@
 package io.jochimsen.cahapp.backend.webservice.response;
 
+import lombok.Data;
+
+@Data
 public class HashResponse<T> {
-    public T data;
-    public int hash;
+    private T data;
+    private int hash;
 }

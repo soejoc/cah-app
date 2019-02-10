@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.jochimsen.cahapp.MyApp;
+import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCard;
 import io.jochimsen.cahapp.di.qualifier.InitialMessage;
 import io.jochimsen.cahapp.di.scope.NetworkScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
@@ -20,33 +21,22 @@ import io.jochimsen.cahframework.session.Session;
 import io.jochimsen.cahframework.util.ProtocolInputStream;
 import io.netty.channel.ChannelHandlerContext;
 import io.reactivex.subjects.Subject;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 @NetworkScope
 public class MessageHandler extends InboundMessageHandlerBase {
-
     private static final String TAG = "MessageHandler";
 
+    @InitialMessage
     private final ProtocolMessage initialMessage;
+
     private final Subject<StartGameResponse> startGameSubject;
     private final Subject<WaitForGameResponse> waitForGameSubject;
     private final Subject<FinishedGameResponse> finishGameSubject;
-    private MyApp myApp;
+    private final MyApp myApp;
     private ServerSession serverSession;
-
-    @Inject
-    public MessageHandler(
-            @InitialMessage final ProtocolMessage initialMessage,
-            final Subject<StartGameResponse> startGameSubject,
-            final Subject<WaitForGameResponse> waitForGameSubject,
-            final Subject<FinishedGameResponse> finishGameSubject,
-            final MyApp myApp
-    ) {
-        this.initialMessage = initialMessage;
-        this.startGameSubject = startGameSubject;
-        this.waitForGameSubject = waitForGameSubject;
-        this.finishGameSubject = finishGameSubject;
-        this.myApp = myApp;
-    }
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {

@@ -21,19 +21,15 @@ import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
+import lombok.AllArgsConstructor;
 
 @AppScope
+@AllArgsConstructor(onConstructor = @__({@Inject}))
 public class WhiteCardRepository {
-    private final WhiteCardDao whiteCardDao;
-    private final WhiteCardApi whiteCardApi;
-
     private static final String TAG = "WhiteCardRepository";
 
-    @Inject
-    public WhiteCardRepository(final WhiteCardDao whiteCardDao, final WhiteCardApi whiteCardApi) {
-        this.whiteCardDao = whiteCardDao;
-        this.whiteCardApi = whiteCardApi;
-    }
+    private final WhiteCardDao whiteCardDao;
+    private final WhiteCardApi whiteCardApi;
 
     public Disposable synchronize(final Action action, final Scheduler scheduler) {
         return whiteCardDao.getHash()
@@ -47,7 +43,7 @@ public class WhiteCardRepository {
 
                             if(hash != null) {
                                 final CheckHashResponse checkHashResponse = whiteCardApi.checkHash(CheckHashRequest.create(hash)).blockingGet();
-                                needsSynchronization = !checkHashResponse.hashEqual;
+                                needsSynchronization = !checkHashResponse.isHashEqual();
                             } else {
                                 needsSynchronization = true;
                             }
@@ -55,15 +51,15 @@ public class WhiteCardRepository {
                             if(needsSynchronization) {
                                 final HashResponse<List<WhiteCardResponse>> hashResponse = whiteCardApi.getWhiteCards().blockingGet();
 
-                                final List<WhiteCard> whiteCards = hashResponse.data.stream()
-                                        .map(whiteCardResponse -> new WhiteCard(whiteCardResponse.whiteCardId, whiteCardResponse.text))
+                                final List<WhiteCard> whiteCards = hashResponse.getData().stream()
+                                        .map(whiteCardResponse -> new WhiteCard(whiteCardResponse.getWhiteCardId(), whiteCardResponse.getText()))
                                         .collect(Collectors.toList());
 
                                 whiteCardDao.delete();
                                 whiteCardDao.save(whiteCards);
 
                                 whiteCardDao.deleteHash();
-                                whiteCardDao.saveHash(new WhiteCardsHash(hashResponse.hash));
+                                whiteCardDao.saveHash(new WhiteCardsHash(hashResponse.getHash()));
                             }
 
                             Completable.fromAction(action)

@@ -10,12 +10,14 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.jochimsen.cahapp.R;
+import lombok.Setter;
 
 public class WaitFragment extends Fragment {
 
     @BindView(R.id.waitMessageView)
     TextView waitMessageView;
 
+    @Setter
     private String message;
 
     @Override
@@ -27,9 +29,5 @@ public class WaitFragment extends Fragment {
         waitMessageView.setText(message);
 
         return view;
-    }
-
-    public void setMessage(final String message) {
-        this.message = message;
     }
 }

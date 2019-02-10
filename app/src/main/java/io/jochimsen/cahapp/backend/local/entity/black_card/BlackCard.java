@@ -5,8 +5,18 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor(onConstructor = @__({@Ignore}))
+@NoArgsConstructor
 public class BlackCard {
+
     @PrimaryKey
     private long blackCardId;
 
@@ -14,38 +24,4 @@ public class BlackCard {
     private String text;
 
     private int blankCount;
-
-    public BlackCard() {}
-
-    @Ignore
-    public BlackCard(final long blackCardId, @NonNull final String text, final int blankCount) {
-        this.blackCardId = blackCardId;
-        this.text = text;
-        this.blankCount = blankCount;
-    }
-
-    public long getBlackCardId() {
-        return blackCardId;
-    }
-
-    public void setBlackCardId(final long blackCardId) {
-        this.blackCardId = blackCardId;
-    }
-
-    @NonNull
-    public String getText() {
-        return text;
-    }
-
-    public void setText(@NonNull final String text) {
-        this.text = text;
-    }
-
-    public int getBlankCount() {
-        return blankCount;
-    }
-
-    public void setBlankCount(final int blankCount) {
-        this.blankCount = blankCount;
-    }
 }

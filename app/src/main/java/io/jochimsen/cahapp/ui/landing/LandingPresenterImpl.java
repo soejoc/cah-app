@@ -20,9 +20,13 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.Subject;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor(onConstructor = @__({@Inject}))
 @LandingActivityScope
 public class LandingPresenterImpl implements LandingPresenter {
+    private static final String TAG = "LandingPresenterImpl";
+
     private final LandingView landingView;
     private final SessionKeyRepository sessionKeyRepository;
     private final WhiteCardRepository whiteCardRepository;
@@ -31,31 +35,7 @@ public class LandingPresenterImpl implements LandingPresenter {
     private final Subject<StartGameResponse> startGameSubject;
     private final Subject<FinishedGameResponse> finishGameSubject;
     private final MyApp myApp;
-    private final CompositeDisposable compositeDisposable;
-
-    private static final String TAG = "LandingPresenterImpl";
-
-    @Inject
-    public LandingPresenterImpl(
-            final LandingView landingView,
-            final SessionKeyRepository sessionKeyRepository,
-            final WhiteCardRepository whiteCardRepository,
-            final BlackCardRepository blackCardRepository,
-            final Subject<WaitForGameResponse> waitForGameSubject,
-            final Subject<StartGameResponse> startGameSubject,
-            final Subject<FinishedGameResponse> finishGameSubject,
-            final MyApp myApp
-    ) {
-        this.landingView = landingView;
-        this.sessionKeyRepository = sessionKeyRepository;
-        this.whiteCardRepository = whiteCardRepository;
-        this.blackCardRepository = blackCardRepository;
-        this.waitForGameSubject = waitForGameSubject;
-        this.startGameSubject = startGameSubject;
-        this.finishGameSubject = finishGameSubject;
-        this.myApp = myApp;
-        this.compositeDisposable = new CompositeDisposable();
-    }
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public void onStart() {
