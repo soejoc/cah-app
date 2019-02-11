@@ -1,22 +1,25 @@
 package io.jochimsen.cahapp.di.component;
 
-import javax.inject.Singleton;
-
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 import io.jochimsen.cahapp.MyApp;
-import io.jochimsen.cahapp.di.module.ActivityBuilder;
+import io.jochimsen.cahapp.di.module.ApiModule;
+import io.jochimsen.cahapp.di.module.AppActivityModule;
 import io.jochimsen.cahapp.di.module.AppModule;
+import io.jochimsen.cahapp.di.module.MessageSubjectModule;
 import io.jochimsen.cahapp.di.module.RoomModule;
+import io.jochimsen.cahapp.di.scope.AppScope;
 
-@Singleton
+@AppScope
 @Component(modules = {
         AndroidSupportInjectionModule.class,
         AppModule.class,
-        ActivityBuilder.class,
-        RoomModule.class
+        AppActivityModule.class,
+        RoomModule.class,
+        MessageSubjectModule.class,
+        ApiModule.class
 })
 public interface AppComponent extends AndroidInjector<MyApp> {
     @Component.Builder
@@ -28,4 +31,6 @@ public interface AppComponent extends AndroidInjector<MyApp> {
 
     @Override
     void inject(final MyApp instance);
+
+    NetworkComponent.Builder networkComponentBuilder();
 }

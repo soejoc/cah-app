@@ -8,12 +8,20 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import io.jochimsen.cahapp.R;
+import io.jochimsen.cahapp.di.scope.LandingActivityScope;
 import io.jochimsen.cahapp.ui.game.GameActivity;
 
+@LandingActivityScope
 public class LandingActivity extends DaggerAppCompatActivity implements LandingView {
 
     @Inject
     LandingPresenter landingPresenter;
+
+    @Inject
+    StartGameFragment startGameFragment;
+
+    @Inject
+    WaitFragment waitFragment;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -40,14 +48,12 @@ public class LandingActivity extends DaggerAppCompatActivity implements LandingV
     @Override
     public void showStartGameFragment() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        final StartGameFragment startGameFragment = new StartGameFragment();
         fragmentManager.beginTransaction().replace(R.id.container, startGameFragment).commit();
     }
 
     @Override
     public void showWaitFragment(final int resId) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
-        final WaitFragment waitFragment = new WaitFragment();
 
         if(resId != 0) {
             waitFragment.setMessage(getString(resId));

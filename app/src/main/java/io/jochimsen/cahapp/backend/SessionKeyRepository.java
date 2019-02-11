@@ -1,22 +1,19 @@
-package io.jochimsen.cahapp.repository;
+package io.jochimsen.cahapp.backend;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKey;
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKeyDao;
+import io.jochimsen.cahapp.di.scope.AppScope;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.schedulers.Schedulers;
+import lombok.AllArgsConstructor;
 
-@Singleton
+@AppScope
+@AllArgsConstructor(onConstructor = @__({@Inject}))
 public class SessionKeyRepository {
     private final SessionKeyDao sessionKeyDao;
-
-    @Inject
-    public SessionKeyRepository(final SessionKeyDao sessionKeyDao) {
-        this.sessionKeyDao = sessionKeyDao;
-    }
 
     public Maybe<SessionKey> getSessionKey() {
         return sessionKeyDao.getSessionKey();

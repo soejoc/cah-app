@@ -4,7 +4,6 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 
-
 import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCard;
 import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCardDao;
 import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCardsHash;

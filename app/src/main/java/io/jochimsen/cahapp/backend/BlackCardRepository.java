@@ -1,4 +1,4 @@
-package io.jochimsen.cahapp.repository;
+package io.jochimsen.cahapp.backend;
 
 import android.util.Log;
 
@@ -6,33 +6,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCard;
 import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCardDao;
 import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCardsHash;
-import io.jochimsen.cahapp.backend.webservice.black_card.BlackCardController;
-import io.jochimsen.cahapp.backend.webservice.black_card.response.BlackCardResponse;
-import io.jochimsen.cahapp.backend.webservice.global.response.CheckHashResponse;
-import io.jochimsen.cahapp.backend.webservice.global.response.HashResponse;
+import io.jochimsen.cahapp.backend.webservice.api.BlackCardApi;
+import io.jochimsen.cahapp.backend.webservice.request.CheckHashRequest;
+import io.jochimsen.cahapp.backend.webservice.response.BlackCardResponse;
+import io.jochimsen.cahapp.backend.webservice.response.CheckHashResponse;
+import io.jochimsen.cahapp.backend.webservice.response.HashResponse;
+import io.jochimsen.cahapp.di.scope.AppScope;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
+import lombok.AllArgsConstructor;
 
-@Singleton
+@AppScope
+@AllArgsConstructor(onConstructor = @__({@Inject}))
 public class BlackCardRepository {
-    private final BlackCardDao blackCardDao;
-    private final BlackCardController blackCardController;
-
     private static final String TAG = "WhiteCardRepository";
 
-    @Inject
-    public BlackCardRepository(final BlackCardDao blackCardDao, final BlackCardController blackCardController) {
-        this.blackCardDao = blackCardDao;
-        this.blackCardController = blackCardController;
-    }
+    private final BlackCardDao blackCardDao;
+    private final BlackCardApi blackCardApi;
 
     public Disposable synchronize(final Action action, final Scheduler scheduler) {
         return blackCardDao.getHash()
@@ -45,24 +42,24 @@ public class BlackCardRepository {
                             boolean needsSynchronization;
 
                             if(hash != null) {
-                                final CheckHashResponse checkHashResponse = blackCardController.checkHash(hash).blockingGet();
-                                needsSynchronization = !checkHashResponse.hashEqual;
+                                final CheckHashResponse checkHashResponse = blackCardApi.checkHash(CheckHashRequest.create(hash)).blockingGet();
+                                needsSynchronization = !checkHashResponse.isHashEqual();
                             } else {
                                 needsSynchronization = true;
                             }
 
                             if(needsSynchronization) {
-                                final HashResponse<List<BlackCardResponse>> hashResponse = blackCardController.getBlackCards().blockingGet();
+                                final HashResponse<List<BlackCardResponse>> hashResponse = blackCardApi.getBlackCards().blockingGet();
 
-                                final List<BlackCard> blackCards = hashResponse.data.stream()
-                                        .map(blackCardResponse -> new BlackCard(blackCardResponse.blackCardId, blackCardResponse.text, blackCardResponse.blankCount))
+                                final List<BlackCard> blackCards = hashResponse.getData().stream()
+                                        .map(blackCardResponse -> new BlackCard(blackCardResponse.getBlackCardId(), blackCardResponse.getText(), blackCardResponse.getBlankCount()))
                                         .collect(Collectors.toList());
 
                                 blackCardDao.delete();
                                 blackCardDao.save(blackCards);
 
                                 blackCardDao.deleteHash();
-                                blackCardDao.saveHash(new BlackCardsHash((hashResponse.hash)));
+                                blackCardDao.saveHash(new BlackCardsHash(hashResponse.getHash()));
                             }
 
                             Completable.fromAction(action)
