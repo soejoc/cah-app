@@ -10,21 +10,20 @@ import io.jochimsen.cahapp.di.qualifier.GameserverPort;
 import io.jochimsen.cahapp.di.scope.NetworkScope;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor(onConstructor = @__({@Inject}))
 @NetworkScope
 public class NetworkWorker implements Runnable {
-    private final String host;
-    private final int port;
-    private final Bootstrap bootstrap;
-
     private static final String TAG = "NetworkWorker";
 
-    @Inject
-    public NetworkWorker(@GameserverHost final String host, @GameserverPort final int port, final Bootstrap bootstrap) {
-        this.host = host;
-        this.port = port;
-        this.bootstrap = bootstrap;
-    }
+    @GameserverHost
+    private final String host;
+
+    @GameserverPort
+    private final int port;
+
+    private final Bootstrap bootstrap;
 
     @Override
     public void run() {

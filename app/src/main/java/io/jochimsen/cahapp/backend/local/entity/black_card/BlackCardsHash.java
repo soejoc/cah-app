@@ -5,26 +5,18 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor(onConstructor = @__({@Ignore}))
+@NoArgsConstructor
 public class BlackCardsHash {
 
-    @NonNull
     @PrimaryKey
     private Integer hash;
-
-    public BlackCardsHash() {}
-
-    @Ignore
-    public BlackCardsHash(final Integer hash) {
-        this.hash = hash;
-    }
-
-    @NonNull
-    public Integer getHash() {
-        return hash;
-    }
-
-    public void setHash(@NonNull final Integer hash) {
-        this.hash = hash;
-    }
 }

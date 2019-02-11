@@ -1,5 +1,8 @@
 package io.jochimsen.cahapp.backend.webservice.response;
 
+import lombok.Data;
+
+@Data
 public class CheckHashResponse {
-    public boolean hashEqual;
+    private boolean hashEqual;
 }

@@ -9,15 +9,12 @@ import io.jochimsen.cahapp.di.scope.AppScope;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.schedulers.Schedulers;
+import lombok.AllArgsConstructor;
 
 @AppScope
+@AllArgsConstructor(onConstructor = @__({@Inject}))
 public class SessionKeyRepository {
     private final SessionKeyDao sessionKeyDao;
-
-    @Inject
-    public SessionKeyRepository(final SessionKeyDao sessionKeyDao) {
-        this.sessionKeyDao = sessionKeyDao;
-    }
 
     public Maybe<SessionKey> getSessionKey() {
         return sessionKeyDao.getSessionKey();

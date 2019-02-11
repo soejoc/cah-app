@@ -35,6 +35,11 @@ dependencies {
 
     implementation project(path: ":cah-framework")
 
+    // Lombok
+    def lombok_version = "1.18.4"
+    compileOnly "org.projectlombok:lombok:$lombok_version"
+    annotationProcessor "org.projectlombok:lombok:$lombok_version"
+
     def butterknife_version = "8.8.1"
     implementation "com.jakewharton:butterknife:$butterknife_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"

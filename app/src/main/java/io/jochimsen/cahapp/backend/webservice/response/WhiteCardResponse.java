@@ -1,6 +1,9 @@
 package io.jochimsen.cahapp.backend.webservice.response;
 
+import lombok.Data;
+
+@Data
 public class WhiteCardResponse {
-    public long whiteCardId;
-    public String text;
+    private long whiteCardId;
+    private String text;
 }

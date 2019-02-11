@@ -21,19 +21,15 @@ import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
+import lombok.AllArgsConstructor;
 
 @AppScope
+@AllArgsConstructor(onConstructor = @__({@Inject}))
 public class BlackCardRepository {
-    private final BlackCardDao blackCardDao;
-    private final BlackCardApi blackCardApi;
-
     private static final String TAG = "WhiteCardRepository";
 
-    @Inject
-    public BlackCardRepository(final BlackCardDao blackCardDao, final BlackCardApi blackCardApi) {
-        this.blackCardDao = blackCardDao;
-        this.blackCardApi = blackCardApi;
-    }
+    private final BlackCardDao blackCardDao;
+    private final BlackCardApi blackCardApi;
 
     public Disposable synchronize(final Action action, final Scheduler scheduler) {
         return blackCardDao.getHash()
@@ -47,7 +43,7 @@ public class BlackCardRepository {
 
                             if(hash != null) {
                                 final CheckHashResponse checkHashResponse = blackCardApi.checkHash(CheckHashRequest.create(hash)).blockingGet();
-                                needsSynchronization = !checkHashResponse.hashEqual;
+                                needsSynchronization = !checkHashResponse.isHashEqual();
                             } else {
                                 needsSynchronization = true;
                             }
@@ -55,15 +51,15 @@ public class BlackCardRepository {
                             if(needsSynchronization) {
                                 final HashResponse<List<BlackCardResponse>> hashResponse = blackCardApi.getBlackCards().blockingGet();
 
-                                final List<BlackCard> blackCards = hashResponse.data.stream()
-                                        .map(blackCardResponse -> new BlackCard(blackCardResponse.blackCardId, blackCardResponse.text, blackCardResponse.blankCount))
+                                final List<BlackCard> blackCards = hashResponse.getData().stream()
+                                        .map(blackCardResponse -> new BlackCard(blackCardResponse.getBlackCardId(), blackCardResponse.getText(), blackCardResponse.getBlankCount()))
                                         .collect(Collectors.toList());
 
                                 blackCardDao.delete();
                                 blackCardDao.save(blackCards);
 
                                 blackCardDao.deleteHash();
-                                blackCardDao.saveHash(new BlackCardsHash((hashResponse.hash)));
+                                blackCardDao.saveHash(new BlackCardsHash(hashResponse.getHash()));
                             }
 
                             Completable.fromAction(action)
