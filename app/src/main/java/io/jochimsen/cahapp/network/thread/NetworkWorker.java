@@ -3,7 +3,6 @@ package io.jochimsen.cahapp.network.thread;
 import android.util.Log;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import io.jochimsen.cahapp.di.qualifier.GameserverHost;
 import io.jochimsen.cahapp.di.qualifier.GameserverPort;

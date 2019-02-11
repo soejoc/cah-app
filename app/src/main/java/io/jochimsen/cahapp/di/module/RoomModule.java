@@ -3,8 +3,6 @@ package io.jochimsen.cahapp.di.module;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import io.jochimsen.cahapp.backend.local.CahDatabase;

@@ -1,7 +1,5 @@
 package io.jochimsen.cahapp.di.module;
 
-import javax.inject.Named;
-
 import dagger.Module;
 import dagger.Provides;
 import io.jochimsen.cahapp.di.qualifier.GameserverHost;

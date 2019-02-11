@@ -6,11 +6,11 @@ import javax.inject.Inject;
 
 import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.R;
-import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKey;
-import io.jochimsen.cahapp.di.scope.LandingActivityScope;
 import io.jochimsen.cahapp.backend.BlackCardRepository;
 import io.jochimsen.cahapp.backend.SessionKeyRepository;
 import io.jochimsen.cahapp.backend.WhiteCardRepository;
+import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKey;
+import io.jochimsen.cahapp.di.scope.LandingActivityScope;
 import io.jochimsen.cahframework.protocol.object.message.request.RestartGameRequest;
 import io.jochimsen.cahframework.protocol.object.message.response.FinishedGameResponse;
 import io.jochimsen.cahframework.protocol.object.message.response.StartGameResponse;

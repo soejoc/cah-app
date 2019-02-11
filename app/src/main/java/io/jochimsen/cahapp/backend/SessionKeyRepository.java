@@ -1,7 +1,6 @@
 package io.jochimsen.cahapp.backend;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKey;
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKeyDao;

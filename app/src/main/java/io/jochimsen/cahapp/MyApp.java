@@ -9,7 +9,6 @@ import io.jochimsen.cahapp.di.component.AppComponent;
 import io.jochimsen.cahapp.di.component.DaggerAppComponent;
 import io.jochimsen.cahapp.di.component.NetworkComponent;
 import io.jochimsen.cahapp.di.component.SessionComponent;
-import io.jochimsen.cahapp.di.module.ConnectionModule;
 import io.jochimsen.cahapp.di.scope.AppScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
 import io.jochimsen.cahapp.network.thread.NetworkWorker;

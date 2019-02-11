@@ -1,7 +1,5 @@
 package io.jochimsen.cahapp.di.component;
 
-import javax.inject.Named;
-
 import dagger.BindsInstance;
 import dagger.Subcomponent;
 import io.jochimsen.cahapp.di.module.ConnectionModule;

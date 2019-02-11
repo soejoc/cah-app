@@ -3,10 +3,8 @@ package io.jochimsen.cahapp.network.handler;
 import android.util.Log;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import io.jochimsen.cahapp.MyApp;
-import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCard;
 import io.jochimsen.cahapp.di.qualifier.InitialMessage;
 import io.jochimsen.cahapp.di.scope.NetworkScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
@@ -21,7 +19,6 @@ import io.jochimsen.cahframework.session.Session;
 import io.jochimsen.cahframework.util.ProtocolInputStream;
 import io.netty.channel.ChannelHandlerContext;
 import io.reactivex.subjects.Subject;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(onConstructor = @__({@Inject}))
