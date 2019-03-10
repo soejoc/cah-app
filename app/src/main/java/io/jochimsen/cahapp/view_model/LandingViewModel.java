@@ -83,6 +83,7 @@ public class LandingViewModel extends ViewModel {
     }
 
     public boolean startGame() {
+        //noinspection ConstantConditions
         if(getBlackCards().getValue().getStatus() == Resource.Status.SUCCESS && getWhiteCards().getValue().getStatus() == Resource.Status.SUCCESS) {
             final StartGameRequest startGameRequest = new StartGameRequest(nickname);
             myApp.createConnection(startGameRequest);
