@@ -8,6 +8,7 @@ import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.di.module.ApiModule;
 import io.jochimsen.cahapp.di.module.AppActivityModule;
 import io.jochimsen.cahapp.di.module.AppModule;
+import io.jochimsen.cahapp.di.module.MessageHandlerModule;
 import io.jochimsen.cahapp.di.module.RoomModule;
 import io.jochimsen.cahapp.di.module.ViewModelModule;
 import io.jochimsen.cahapp.di.scope.AppScope;
@@ -19,7 +20,8 @@ import io.jochimsen.cahapp.di.scope.AppScope;
         AppActivityModule.class,
         RoomModule.class,
         ApiModule.class,
-        ViewModelModule.class
+        ViewModelModule.class,
+        MessageHandlerModule.class
 })
 public interface AppComponent extends AndroidInjector<MyApp> {
     @Component.Builder
