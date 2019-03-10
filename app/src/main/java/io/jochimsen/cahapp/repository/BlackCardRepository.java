@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCard;
 import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCardDao;
 import io.jochimsen.cahapp.backend.local.entity.black_card.BlackCardsHash;
+import io.jochimsen.cahapp.backend.ressource.NetworkBoundResource;
 import io.jochimsen.cahapp.backend.ressource.Resource;
 import io.jochimsen.cahapp.backend.webservice.api.BlackCardApi;
 import io.jochimsen.cahapp.backend.webservice.request.CheckHashRequest;
@@ -20,7 +21,6 @@ import io.jochimsen.cahapp.backend.webservice.response.BlackCardResponse;
 import io.jochimsen.cahapp.backend.webservice.response.CheckHashResponse;
 import io.jochimsen.cahapp.backend.webservice.response.HashResponse;
 import io.jochimsen.cahapp.di.scope.AppScope;
-import io.jochimsen.cahapp.backend.ressource.NetworkBoundResource;
 import io.reactivex.Single;
 import lombok.RequiredArgsConstructor;
 

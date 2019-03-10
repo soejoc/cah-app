@@ -2,16 +2,11 @@ package io.jochimsen.cahapp.di.component;
 
 import dagger.BindsInstance;
 import dagger.Subcomponent;
-import io.jochimsen.cahapp.di.component.message_handler.FinishedGameHandlerComponent;
-import io.jochimsen.cahapp.di.component.message_handler.StartGameHandlerComponent;
-import io.jochimsen.cahapp.di.module.SessionModule;
 import io.jochimsen.cahapp.di.scope.SessionScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
 
 @SessionScope
-@Subcomponent(modules = {
-        SessionModule.class
-})
+@Subcomponent
 public interface SessionComponent {
     @Subcomponent.Builder
     interface Builder {
@@ -21,7 +16,4 @@ public interface SessionComponent {
     }
 
     GameActivityComponent.Builder gameActivityComponentBuilder();
-
-    StartGameHandlerComponent.Builder startGameHandlerBuilder();
-    FinishedGameHandlerComponent.Builder finishedGameHandlerBuilder();
 }

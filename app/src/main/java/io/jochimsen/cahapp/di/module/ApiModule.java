@@ -14,13 +14,13 @@ public abstract class ApiModule {
 
     @AppScope
     @Provides
-    public static BlackCardApi provideBlackCardApi(final Retrofit retrofit) {
+    static BlackCardApi provideBlackCardApi(final Retrofit retrofit) {
         return retrofit.create(BlackCardApi.class);
     }
 
     @AppScope
     @Provides
-    public static WhiteCardApi provideWhiteCardApi(final Retrofit retrofit) {
+    static WhiteCardApi provideWhiteCardApi(final Retrofit retrofit) {
         return retrofit.create(WhiteCardApi.class);
     }
 }

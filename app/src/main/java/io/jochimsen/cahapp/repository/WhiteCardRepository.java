@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.EmptyResultSetException;
 import android.support.annotation.MainThread;
 import android.support.annotation.WorkerThread;
-import android.util.Log;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,13 +21,7 @@ import io.jochimsen.cahapp.backend.webservice.response.CheckHashResponse;
 import io.jochimsen.cahapp.backend.webservice.response.HashResponse;
 import io.jochimsen.cahapp.backend.webservice.response.WhiteCardResponse;
 import io.jochimsen.cahapp.di.scope.AppScope;
-import io.reactivex.Completable;
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.schedulers.Schedulers;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @AppScope

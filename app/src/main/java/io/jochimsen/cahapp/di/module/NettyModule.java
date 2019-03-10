@@ -24,13 +24,13 @@ public abstract class NettyModule {
 
     @NetworkScope
     @Provides
-    static public EventLoopGroup provideEventLoopGroup() {
+    static EventLoopGroup provideEventLoopGroup() {
         return new NioEventLoopGroup();
     }
 
     @NetworkScope
     @Provides
-    static public SslContext provideSslContext() {
+    static SslContext provideSslContext() {
         try {
             return SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
         } catch (final SSLException e) {
@@ -41,13 +41,13 @@ public abstract class NettyModule {
 
     @NetworkScope
     @Provides
-    static public ProtocolMessageChannelInitializer provideProtocolMessageChannelInitializer(final InboundHandler inboundHandler) {
+    static ProtocolMessageChannelInitializer provideProtocolMessageChannelInitializer(final InboundHandler inboundHandler) {
         return new ProtocolMessageChannelInitializer(inboundHandler);
     }
 
     @NetworkScope
     @Provides
-    static public Bootstrap provideBootstrap(final EventLoopGroup eventLoopGroup, final ProtocolMessageChannelInitializer protocolMessageChannelInitializer) {
+    static Bootstrap provideBootstrap(final EventLoopGroup eventLoopGroup, final ProtocolMessageChannelInitializer protocolMessageChannelInitializer) {
         final Bootstrap b = new Bootstrap();
         b.group(eventLoopGroup);
         b.channel(NioSocketChannel.class);
