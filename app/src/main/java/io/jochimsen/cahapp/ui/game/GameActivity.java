@@ -15,10 +15,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.R;
-import io.jochimsen.cahapp.di.scope.GameActivityScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
 
-@GameActivityScope
 public class GameActivity extends AppCompatActivity implements GameView {
 
     @BindView(R.id.drawer_layout)

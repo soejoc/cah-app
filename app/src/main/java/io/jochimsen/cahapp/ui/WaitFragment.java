@@ -1,4 +1,4 @@
-package io.jochimsen.cahapp.ui.landing;
+package io.jochimsen.cahapp.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +18,7 @@ public class WaitFragment extends Fragment {
     TextView waitMessageView;
 
     @Setter
-    private String message;
+    private int resId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,7 +26,9 @@ public class WaitFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_wait, container, false);
         ButterKnife.bind(this, view);
 
-        waitMessageView.setText(message);
+        if(resId != 0) {
+            waitMessageView.setText(resId);
+        }
 
         return view;
     }

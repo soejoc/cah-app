@@ -51,13 +51,15 @@ public class MyApp extends DaggerApplication {
         Log.e(TAG, throwable.getMessage());
     }
 
-    public void createSessionComponent(final ServerSession serverSession) {
+    public SessionComponent createSessionComponent(final ServerSession serverSession) {
         if(sessionComponent == null) {
             sessionComponent = networkComponent
                     .sessionComponentBuilder()
                     .serverSession(serverSession)
                     .build();
         }
+
+        return sessionComponent;
     }
 
     public void releaseSessionComponent() {

@@ -1,5 +1,6 @@
 package io.jochimsen.cahapp.backend.local.entity.black_card;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
@@ -18,10 +19,10 @@ public interface BlackCardDao {
     void saveHash(final BlackCardsHash blackCardsHash);
 
     @Query("SELECT * FROM BlackCard")
-    Single<List<BlackCard>> get();
+    LiveData<List<BlackCard>> get();
 
     @Query("SELECT * FROM BlackCardsHash LIMIT 1")
-    Maybe<BlackCardsHash> getHash();
+    Single<BlackCardsHash> getHash();
 
     @Query("DELETE FROM BlackCard")
     void delete();
