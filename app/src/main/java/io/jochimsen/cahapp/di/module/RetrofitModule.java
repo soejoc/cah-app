@@ -17,7 +17,7 @@ public abstract class RetrofitModule {
 
     @AppScope
     @Provides
-    public static Retrofit provideRetrofit(final Gson gson, final OkHttpClient okHttpClient, @WebserviceBaseUrl final String baseUrl) {
+    static Retrofit provideRetrofit(final Gson gson, final OkHttpClient okHttpClient, @WebserviceBaseUrl final String baseUrl) {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(okHttpClient)
@@ -28,14 +28,14 @@ public abstract class RetrofitModule {
 
     @AppScope
     @Provides
-    public static Gson provideGson() {
+    static Gson provideGson() {
         return new GsonBuilder()
                 .create();
     }
 
     @AppScope
     @Provides
-    public static OkHttpClient provideOkHttpClient() {
+    static OkHttpClient provideOkHttpClient() {
         return new OkHttpClient
                 .Builder()
                 .build();
@@ -44,7 +44,7 @@ public abstract class RetrofitModule {
     @AppScope
     @WebserviceBaseUrl
     @Provides
-    public static String provideBaseUrl() {
+    static String provideBaseUrl() {
         return "https://api.cah.jochimsen.io/";
     }
 }

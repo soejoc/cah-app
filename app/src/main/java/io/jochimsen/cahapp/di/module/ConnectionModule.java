@@ -12,14 +12,14 @@ public abstract class ConnectionModule {
     @GameserverPort
     @NetworkScope
     @Provides
-    static public int providePort() {
+    static int providePort() {
         return 666;
     }
 
     @GameserverHost
     @NetworkScope
     @Provides
-    static public String provideHost() {
+    static String provideHost() {
         return "192.168.0.143";
     }
 }

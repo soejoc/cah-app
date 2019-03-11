@@ -4,10 +4,8 @@ import dagger.BindsInstance;
 import dagger.Subcomponent;
 import dagger.android.AndroidInjector;
 import io.jochimsen.cahapp.di.module.GameActivityModule;
-import io.jochimsen.cahapp.di.scope.GameActivityScope;
 import io.jochimsen.cahapp.ui.game.GameActivity;
 
-@GameActivityScope
 @Subcomponent(modules = {
         GameActivityModule.class
 })

@@ -1,42 +1,42 @@
 package io.jochimsen.cahapp.di.module;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.android.ContributesAndroidInjector;
-import io.jochimsen.cahapp.di.scope.LandingActivityScope;
-import io.jochimsen.cahapp.di.scope.StartGameFragmentScope;
-import io.jochimsen.cahapp.ui.landing.LandingActivity;
-import io.jochimsen.cahapp.ui.landing.LandingPresenter;
-import io.jochimsen.cahapp.ui.landing.LandingPresenterImpl;
-import io.jochimsen.cahapp.ui.landing.LandingView;
+import io.jochimsen.cahapp.di.scope.ActivityScope;
+import io.jochimsen.cahapp.di.scope.FragmentScope;
+import io.jochimsen.cahapp.ui.WaitFragment;
 import io.jochimsen.cahapp.ui.landing.StartGameFragment;
-import io.jochimsen.cahapp.ui.landing.WaitFragment;
+import io.jochimsen.cahapp.ui.landing.WaitForCardSynchronizationFragment;
 
 @Module
-public abstract class LandingActivityModule {
+abstract class LandingActivityModule {
 
-    @LandingActivityScope
-    @Binds
-    abstract LandingView bindLandingView(final LandingActivity landingActivity);
-
-    @LandingActivityScope
-    @Binds
-    abstract LandingPresenter bindLandingPresenter(final LandingPresenterImpl landingPresenter);
-
-    @StartGameFragmentScope
-    @ContributesAndroidInjector(modules = StartGameFragmentModule.class)
+    @FragmentScope
+    @ContributesAndroidInjector
     abstract StartGameFragment bindStartGameFragment();
 
-    @LandingActivityScope
+    @FragmentScope
+    @ContributesAndroidInjector
+    abstract WaitForCardSynchronizationFragment bindWaitForCardSynchronizationFragment();
+
+    ////////////////// Provides
+
+    @ActivityScope
     @Provides
-    public static StartGameFragment provideStartGameFragment() {
+    static StartGameFragment provideStartGameFragment() {
         return new StartGameFragment();
     }
 
-    @LandingActivityScope
+    @ActivityScope
     @Provides
-    public static WaitFragment provideWaitFragment() {
+    static WaitFragment provideWaitFragment() {
         return new WaitFragment();
+    }
+
+    @ActivityScope
+    @Provides
+    static WaitForCardSynchronizationFragment provideWaitForCardSynchronizationFragment() {
+        return new WaitForCardSynchronizationFragment();
     }
 }

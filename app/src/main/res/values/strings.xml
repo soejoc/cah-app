@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">cah-app</string>
-    <string name="nickname">Nikname</string>
+    <string name="nickname">Nickname</string>
     <string name="play">Play</string>
     <string name="wait_for_game_message">Waiting for game to start…</string>
     <string name="title_activity_main">Cards Against Humanity</string>
     <string name="title_activity_game">Game</string>
+    <string name="wait_for_card_synchronization">Waiting for cards to be synchronized…</string>
 </resources>
