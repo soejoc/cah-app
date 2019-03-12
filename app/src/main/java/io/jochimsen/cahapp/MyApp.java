@@ -13,6 +13,7 @@ import io.jochimsen.cahapp.di.scope.AppScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
 import io.jochimsen.cahapp.network.thread.NetworkWorker;
 import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
+import io.jochimsen.cahframework.protocol.object.message.RequestMessage;
 import io.reactivex.Completable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -30,7 +31,7 @@ public class MyApp extends DaggerApplication {
         return (MyApp)context.getApplicationContext();
     }
 
-    public void createConnection(final ProtocolMessage initialMessage) {
+    public void createConnection(final RequestMessage initialMessage) {
         networkComponent = appComponent
                 .networkComponentBuilder()
                 .initialMessage(initialMessage)

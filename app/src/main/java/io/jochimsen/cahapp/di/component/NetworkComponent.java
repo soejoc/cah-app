@@ -8,6 +8,7 @@ import io.jochimsen.cahapp.di.qualifier.InitialMessage;
 import io.jochimsen.cahapp.di.scope.NetworkScope;
 import io.jochimsen.cahapp.network.thread.NetworkWorker;
 import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
+import io.jochimsen.cahframework.protocol.object.message.RequestMessage;
 
 @NetworkScope
 @Subcomponent(modules = {
@@ -18,7 +19,7 @@ public interface NetworkComponent {
     @Subcomponent.Builder
     interface Builder {
         @BindsInstance
-        Builder initialMessage(@InitialMessage final ProtocolMessage initialMessage);
+        Builder initialMessage(@InitialMessage final RequestMessage initialMessage);
         NetworkComponent build();
     }
 
