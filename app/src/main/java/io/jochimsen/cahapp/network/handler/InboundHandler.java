@@ -1,45 +1,38 @@
 package io.jochimsen.cahapp.network.handler;
 
-import android.util.Log;
-
 import javax.inject.Inject;
 
 import io.jochimsen.cahapp.MyApp;
 import io.jochimsen.cahapp.di.component.SessionComponent;
-import io.jochimsen.cahapp.di.factory.MessageHandlerFactory;
+import io.jochimsen.cahapp.di.factory.ClientMessageHandlerFactory;
 import io.jochimsen.cahapp.di.qualifier.InitialMessage;
 import io.jochimsen.cahapp.di.scope.NetworkScope;
-import io.jochimsen.cahapp.message_handler.ClientMessageHandler;
-import io.jochimsen.cahapp.message_handler.FinishedGameHandler;
-import io.jochimsen.cahapp.message_handler.StartGameHandler;
 import io.jochimsen.cahapp.network.session.ServerSession;
 import io.jochimsen.cahapp.repository.ProtocolMessageRepository;
+import io.jochimsen.cahapp.util.ResponseMessageMapper;
 import io.jochimsen.cahframework.handler.inbound.InboundHandlerBase;
-import io.jochimsen.cahframework.protocol.object.message.MessageCode;
-import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
 import io.jochimsen.cahframework.protocol.object.message.RequestMessage;
 import io.jochimsen.cahframework.protocol.object.message.ResponseMessage;
 import io.jochimsen.cahframework.protocol.object.message.error.ErrorMessage;
-import io.jochimsen.cahframework.protocol.object.message.response.FinishedGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.StartGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.WaitForGameResponse;
-import io.jochimsen.cahframework.session.Session;
-import io.jochimsen.cahframework.util.ProtocolInputStream;
 import io.netty.channel.ChannelHandlerContext;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(onConstructor = @__({@Inject}))
 @NetworkScope
-public class InboundHandler extends InboundHandlerBase {
-    private static final String TAG = "InboundHandler";
+public class InboundHandler extends InboundHandlerBase<ServerSession, ResponseMessage> {
 
     @InitialMessage
     private final RequestMessage initialMessage;
     private final ProtocolMessageRepository protocolMessageRepository;
     private final MyApp myApp;
-    private final MessageHandlerFactory messageHandlerFactory;
     private ServerSession serverSession;
     private SessionComponent sessionComponent;
+
+    @Inject
+    public InboundHandler(final ResponseMessageMapper messageMapper, final ClientMessageHandlerFactory clientMessageHandlerFactory, @InitialMessage final RequestMessage initialMessage, final ProtocolMessageRepository protocolMessageRepository, final MyApp myApp) {
+        super(messageMapper, clientMessageHandlerFactory);
+        this.initialMessage = initialMessage;
+        this.protocolMessageRepository = protocolMessageRepository;
+        this.myApp = myApp;
+    }
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
@@ -52,57 +45,22 @@ public class InboundHandler extends InboundHandlerBase {
     }
 
     @Override
-    protected Session getSession(final ChannelHandlerContext ctx) {
+    protected ServerSession getSession(final ChannelHandlerContext ctx) {
         return serverSession;
     }
 
     @Override
-    protected void handleMessage(final int messageId, final ProtocolInputStream protocolInputStream, final Session session) throws Exception {
-        Log.d(TAG, String.format("Received message id %d", messageId));
-
-        ClientMessageHandler messageHandler = null;
-        ResponseMessage responseMessage = null;
-
-        switch (messageId) {
-            case MessageCode.START_GAME_RS: {
-                responseMessage = protocolInputStream.readObject(StartGameResponse.class);
-                messageHandler = messageHandlerFactory.create(StartGameHandler.class);
-                break;
-            }
-
-            case MessageCode.WAIT_FOR_GAME_RS: {
-                responseMessage = protocolInputStream.readObject(WaitForGameResponse.class);
-                break;
-            }
-
-            case MessageCode.FINISHED_GAME_RS: {
-                responseMessage = protocolInputStream.readObject(FinishedGameResponse.class);
-                messageHandler = messageHandlerFactory.create(FinishedGameHandler.class);
-                break;
-            }
-            default: {
-                Log.i(TAG, String.format("Unknown message received %d", messageId));
-                break;
-            }
-        }
-
-        if(messageHandler != null) {
-            //noinspection unchecked
-            messageHandler.handleMessage(responseMessage, serverSession);
-        }
-
-        if(responseMessage != null) {
-            protocolMessageRepository.emit(responseMessage);
-        }
+    protected void onPostHandleMessage(final ServerSession session, final ResponseMessage message) {
+        protocolMessageRepository.emit(message);
     }
 
     @Override
-    protected void onErrorReceived(final ErrorMessage errorMessage, final Session session) {
+    protected void onErrorReceived(final ErrorMessage errorMessage, final ServerSession session) {
 
     }
 
     @Override
-    protected void closeSession(final Session session) {
+    protected void closeSession(final ServerSession session) {
         super.closeSession(session);
 
         if(session == serverSession) {
@@ -113,7 +71,7 @@ public class InboundHandler extends InboundHandlerBase {
     }
 
     @Override
-    protected void onUncaughtException(final Session session, final Throwable throwable) {
+    protected void onUncaughtException(final ServerSession session, final Throwable throwable) {
 
     }
 }

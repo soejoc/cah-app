@@ -7,6 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import dagger.MapKey;
+import io.jochimsen.cahapp.message_handler.ClientMessageHandler;
 import io.jochimsen.cahframework.handler.message.MessageHandler;
 
 @Documented
@@ -14,5 +15,5 @@ import io.jochimsen.cahframework.handler.message.MessageHandler;
 @Retention(RetentionPolicy.RUNTIME)
 @MapKey
 public @interface MessageHandlerKey {
-    Class<? extends MessageHandler> value();
+    Class<? extends ClientMessageHandler> value();
 }
