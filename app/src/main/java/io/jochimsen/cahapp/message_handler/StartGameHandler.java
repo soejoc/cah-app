@@ -5,8 +5,7 @@ import javax.inject.Inject;
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKey;
 import io.jochimsen.cahapp.backend.local.entity.session_key.SessionKeyDao;
 import io.jochimsen.cahapp.network.session.ServerSession;
-import io.jochimsen.cahframework.handler.message.MessageHandler;
-import io.jochimsen.cahframework.protocol.object.message.response.StartGameResponse;
+import io.jochimsen.cahprotocol.message.response.StartGameResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(onConstructor = @__({@Inject}))

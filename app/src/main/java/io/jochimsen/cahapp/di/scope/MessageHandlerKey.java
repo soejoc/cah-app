@@ -8,7 +8,6 @@ import java.lang.annotation.Target;
 
 import dagger.MapKey;
 import io.jochimsen.cahapp.message_handler.ClientMessageHandler;
-import io.jochimsen.cahframework.handler.message.MessageHandler;
 
 @Documented
 @Target({ElementType.METHOD})

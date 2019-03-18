@@ -10,10 +10,10 @@ import io.jochimsen.cahapp.di.scope.NetworkScope;
 import io.jochimsen.cahapp.network.session.ServerSession;
 import io.jochimsen.cahapp.repository.ProtocolMessageRepository;
 import io.jochimsen.cahapp.util.ResponseMessageMapper;
-import io.jochimsen.cahframework.handler.inbound.InboundHandlerBase;
-import io.jochimsen.cahframework.protocol.object.message.RequestMessage;
-import io.jochimsen.cahframework.protocol.object.message.ResponseMessage;
-import io.jochimsen.cahframework.protocol.object.message.error.ErrorMessage;
+import io.jochimsen.collo.handler.inbound.InboundHandlerBase;
+import io.jochimsen.collo.protocol.ErrorMessage;
+import io.jochimsen.collo.protocol.RequestMessage;
+import io.jochimsen.collo.protocol.ResponseMessage;
 import io.netty.channel.ChannelHandlerContext;
 
 @NetworkScope

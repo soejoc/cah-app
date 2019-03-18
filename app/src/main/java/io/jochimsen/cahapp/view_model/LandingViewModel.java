@@ -18,11 +18,11 @@ import io.jochimsen.cahapp.backend.ressource.Resource;
 import io.jochimsen.cahapp.repository.BlackCardRepository;
 import io.jochimsen.cahapp.repository.ProtocolMessageRepository;
 import io.jochimsen.cahapp.repository.WhiteCardRepository;
-import io.jochimsen.cahframework.protocol.object.message.request.RestartGameRequest;
-import io.jochimsen.cahframework.protocol.object.message.request.StartGameRequest;
-import io.jochimsen.cahframework.protocol.object.message.response.FinishedGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.StartGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.WaitForGameResponse;
+import io.jochimsen.cahprotocol.message.request.RestartGameRequest;
+import io.jochimsen.cahprotocol.message.request.StartGameRequest;
+import io.jochimsen.cahprotocol.message.response.FinishedGameResponse;
+import io.jochimsen.cahprotocol.message.response.StartGameResponse;
+import io.jochimsen.cahprotocol.message.response.WaitForGameResponse;
 import lombok.Getter;
 
 public class LandingViewModel extends ViewModel {

@@ -7,8 +7,7 @@ import io.jochimsen.cahapp.di.module.NettyModule;
 import io.jochimsen.cahapp.di.qualifier.InitialMessage;
 import io.jochimsen.cahapp.di.scope.NetworkScope;
 import io.jochimsen.cahapp.network.thread.NetworkWorker;
-import io.jochimsen.cahframework.protocol.object.message.ProtocolMessage;
-import io.jochimsen.cahframework.protocol.object.message.RequestMessage;
+import io.jochimsen.collo.protocol.RequestMessage;
 
 @NetworkScope
 @Subcomponent(modules = {

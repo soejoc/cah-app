@@ -6,14 +6,12 @@ import io.jochimsen.cahapp.di.scope.AppScope;
 import io.jochimsen.cahapp.message_handler.FinishedGameHandler;
 import io.jochimsen.cahapp.message_handler.StartGameHandler;
 import io.jochimsen.cahapp.network.session.ServerSession;
-import io.jochimsen.cahframework.protocol.object.message.MessageCode;
-import io.jochimsen.cahframework.protocol.object.message.ResponseMessage;
-import io.jochimsen.cahframework.protocol.object.message.request.RestartGameRequest;
-import io.jochimsen.cahframework.protocol.object.message.request.StartGameRequest;
-import io.jochimsen.cahframework.protocol.object.message.response.FinishedGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.StartGameResponse;
-import io.jochimsen.cahframework.protocol.object.message.response.WaitForGameResponse;
-import io.jochimsen.cahframework.util.MessageMapper;
+import io.jochimsen.cahprotocol.message.MessageCode;
+import io.jochimsen.cahprotocol.message.response.FinishedGameResponse;
+import io.jochimsen.cahprotocol.message.response.StartGameResponse;
+import io.jochimsen.cahprotocol.message.response.WaitForGameResponse;
+import io.jochimsen.collo.message.MessageMapper;
+import io.jochimsen.collo.protocol.ResponseMessage;
 import lombok.NoArgsConstructor;
 
 @AppScope

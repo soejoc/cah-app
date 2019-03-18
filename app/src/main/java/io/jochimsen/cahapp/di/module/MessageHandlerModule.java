@@ -7,7 +7,6 @@ import io.jochimsen.cahapp.di.scope.MessageHandlerKey;
 import io.jochimsen.cahapp.message_handler.ClientMessageHandler;
 import io.jochimsen.cahapp.message_handler.FinishedGameHandler;
 import io.jochimsen.cahapp.message_handler.StartGameHandler;
-import io.jochimsen.cahframework.handler.message.MessageHandler;
 
 @Module
 public abstract class MessageHandlerModule {

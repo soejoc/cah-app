@@ -8,9 +8,9 @@ import javax.inject.Provider;
 import io.jochimsen.cahapp.di.scope.AppScope;
 import io.jochimsen.cahapp.message_handler.ClientMessageHandler;
 import io.jochimsen.cahapp.network.session.ServerSession;
-import io.jochimsen.cahframework.handler.message.MessageHandler;
-import io.jochimsen.cahframework.protocol.object.message.ResponseMessage;
-import io.jochimsen.cahframework.util.MessageHandlerFactory;
+import io.jochimsen.collo.message.MessageHandler;
+import io.jochimsen.collo.message.MessageHandlerFactory;
+import io.jochimsen.collo.protocol.ResponseMessage;
 import lombok.AllArgsConstructor;
 
 @AppScope

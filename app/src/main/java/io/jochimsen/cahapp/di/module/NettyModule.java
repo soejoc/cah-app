@@ -8,7 +8,7 @@ import dagger.Module;
 import dagger.Provides;
 import io.jochimsen.cahapp.di.scope.NetworkScope;
 import io.jochimsen.cahapp.network.handler.InboundHandler;
-import io.jochimsen.cahframework.initializer.ProtocolMessageChannelInitializer;
+import io.jochimsen.collo.initializer.ProtocolMessageChannelInitializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
